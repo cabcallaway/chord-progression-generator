@@ -50,9 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 mSpotifyAppRemote.getPlayerApi().pause();
             }
         });
-
-
-
     }
 
     @Override
