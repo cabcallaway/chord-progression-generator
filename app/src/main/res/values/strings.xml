@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Let\'s Get Chordy!</string>
+    <string name="question_text">Welcome To Our App.</string>
+    <string name="play_button">Play</string>
+    <string name="pause_button">Pause</string>
+    <string name="correct_toast">Correct!</string>
+    <string name="incorrect_toast">Incorrect!</string>
+    </resources>
