@@ -7,17 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.cpg.sql.DatabaseHelper;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
-import com.spotify.android.appremote.api.ContentApi;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
 
-import com.spotify.protocol.client.CallResult;
-import com.spotify.protocol.client.Subscription;
-import com.spotify.protocol.types.ListItem;
-import com.spotify.protocol.types.ListItems;
-import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
+
+import com.example.cpg.model.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mPlayButton;
     private Button mPauseButton;
+    private Button mDeleteAccountButton;
+
+    private DatabaseHelper userInfo;
+    private User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +35,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String emailFromIntent = getIntent().getStringExtra("EMAIL");
+
         mPlayButton = (Button) findViewById(R.id.play_button);
         mPauseButton = (Button) findViewById(R.id.pause_button);
+        mDeleteAccountButton = (Button) findViewById(R.id.delete_account_button);
 
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mSpotifyAppRemote.getPlayerApi().pause();
+            }
+        });
+        mDeleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //user = userInfo.getUserByEmail(emailFromIntent);
+                //userInfo.deleteUser(user);
+                //finish();
             }
         });
     }

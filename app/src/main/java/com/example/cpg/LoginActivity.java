@@ -1,27 +1,21 @@
-package com.example.cpg.activities;
+package com.example.cpg;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.cpg.MainActivity;
+import com.example.cpg.sql.DatabaseHelper;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
-import android.util.Log;
+
 import android.view.View;
 
-import com.example.cpg.R;
 import com.example.cpg.helpers.InputValidation;
-import com.example.cpg.sql.DatabaseHelper;
-
-
-import android.os.Bundle;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = LoginActivity.this;
@@ -129,8 +123,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
             //emptyInputEditText();
             //startActivity(accountsIntent);
-            Intent intentRegister2 = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intentRegister2);
+            Intent accountsIntent = new Intent(getApplicationContext(), MainActivity.class);
+            accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
+            emptyInputEditText();
+            startActivity(accountsIntent);
 
 
         } else {

@@ -1,4 +1,4 @@
-package com.example.cpg.activities;
+package com.example.cpg;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cpg.R;
 import com.example.cpg.adapters.UsersRecyclerAdapter;
 import com.example.cpg.model.User;
 import com.example.cpg.sql.DatabaseHelper;

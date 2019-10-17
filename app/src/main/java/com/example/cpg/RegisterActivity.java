@@ -1,20 +1,22 @@
-package com.example.cpg.activities;
+package com.example.cpg;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+
+import com.example.cpg.sql.DatabaseHelper;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
 import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
+
 import android.view.View;
 
-import com.example.cpg.R;
 import com.example.cpg.helpers.InputValidation;
 import com.example.cpg.model.User;
-import com.example.cpg.sql.DatabaseHelper;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -147,7 +149,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         } else {
             // Snack Bar to show error message that record already exists
-            Snackbar.make(nestedScrollView, getString(R.string.error_email_exists), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_email_exists), Snackbar.LENGTH_LONG).show();
         }
 
 

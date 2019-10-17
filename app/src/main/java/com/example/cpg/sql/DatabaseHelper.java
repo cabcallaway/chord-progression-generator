@@ -135,6 +135,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * This method is to fetch user by email id and return the user record
+     *
+     * @return user object
+     */
+    public User getUserByEmail(String email) {
+
+        // user object
+        User user = null;
+
+        // array of columns to fetch
+        String[] columns = {
+                COLUMN_USER_ID,
+                COLUMN_USER_EMAIL,
+                COLUMN_USER_NAME,
+                COLUMN_USER_PASSWORD
+        };
+
+        // selection criteria
+        String selection = COLUMN_USER_EMAIL + " = ?";
+
+        // selection argument
+        String[] selectionArgs = {email};
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // query the user table
+        /**
+        * Here query function is used to fetch records from user table this function works like we use sql query.
+        * SQL query equivalent to this query function is
+        * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
+        */
+        Cursor cursor = db.query(TABLE_USER, //Table to query
+                columns, //columns to return
+                selection, //columns for the WHERE clause
+                selectionArgs, //The values for the WHERE clause
+                null, //group the rows
+                null, //filter by row groups
+                null); //The sort order
+
+
+        // moving cursor to first position
+        if (cursor.moveToFirst()) {
+
+        // initializing the user object
+            user = new User();
+            user.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USER_ID))));
+            user.setName(cursor.getString(cursor.getColumnIndex(COLUMN_USER_NAME)));
+            user.setEmail(cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL)));
+            user.setPassword(cursor.getString(cursor.getColumnIndex(COLUMN_USER_PASSWORD)));
+        }
+        cursor.close();
+        db.close();
+
+        // return user
+        return user;
+    }
+
+    /**
      * This method to update user record
      *
      * @param user
