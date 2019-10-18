@@ -1,11 +1,17 @@
 package com.example.cpg;
 
+import android.content.Context;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.cpg.sql.DatabaseHelper;
 import com.spotify.android.appremote.api.ConnectionParams;
@@ -16,7 +22,11 @@ import com.spotify.protocol.types.Track;
 
 import com.example.cpg.model.User;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 public class MainActivity extends AppCompatActivity {
+
+    private final AppCompatActivity activity = MainActivity.this;
 
     private static final String CLIENT_ID = "4d7413a14a664db8a826bb9735292790";
     private static final String REDIRECT_URI = "com.example.cpg://callback";
@@ -24,10 +34,17 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mPlayButton;
     private Button mPauseButton;
+    private Button mUpdateAccountButton;
     private Button mDeleteAccountButton;
+    private Button mUserListButton;
 
     private DatabaseHelper userInfo;
-    private User user = new User();
+    private User user;
+
+    private AppCompatTextView textViewName;
+    private TextInputEditText textInputEditTextEmail;
+
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +52,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Grab the logged in user's email
         String emailFromIntent = getIntent().getStringExtra("EMAIL");
+
+        userInfo = new DatabaseHelper(activity);
+        user = new User();
 
         mPlayButton = (Button) findViewById(R.id.play_button);
         mPauseButton = (Button) findViewById(R.id.pause_button);
+        mUpdateAccountButton = (Button) findViewById(R.id.update_account_button);
         mDeleteAccountButton = (Button) findViewById(R.id.delete_account_button);
+        mUserListButton = (Button) findViewById(R.id.user_list_button);
 
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,12 +77,52 @@ public class MainActivity extends AppCompatActivity {
                 mSpotifyAppRemote.getPlayerApi().pause();
             }
         });
+        mUpdateAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                user.setEmail(emailFromIntent);
+                user = userInfo.getUserByEmail(emailFromIntent);
+
+                final AlertDialog.Builder inputAlert = new AlertDialog.Builder(context);
+                inputAlert.setTitle("Update your account information");
+                inputAlert.setMessage("Please enter a new email address");
+                final EditText userInput = new EditText(context);
+                inputAlert.setView(userInput);
+                inputAlert.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String userInputValue = userInput.getText().toString();
+                        user.setEmail(userInputValue);
+                        userInfo.updateUser(user);
+                        finish();
+                    }
+                });
+                inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = inputAlert.create();
+                alertDialog.show();
+            }
+        });
         mDeleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //user = userInfo.getUserByEmail(emailFromIntent);
-                //userInfo.deleteUser(user);
-                //finish();
+                user.setEmail(emailFromIntent);
+                user = userInfo.getUserByEmail(emailFromIntent);
+                userInfo.deleteUser(user);
+                finish();
+            }
+        });
+        mUserListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent accountsIntent = new Intent(activity, UsersListActivity.class);
+                accountsIntent.putExtra("EMAIL", emailFromIntent);
+                startActivity(accountsIntent);
             }
         });
     }

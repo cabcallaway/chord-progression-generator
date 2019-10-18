@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import android.os.Handler;
 import android.view.View;
 
 import com.example.cpg.helpers.InputValidation;
@@ -80,7 +81,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void initListeners() {
         appCompatButtonRegister.setOnClickListener(this);
         appCompatTextViewLoginLink.setOnClickListener(this);
-
     }
 
     /**
@@ -90,7 +90,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         inputValidation = new InputValidation(activity);
         databaseHelper = new DatabaseHelper(activity);
         user = new User();
-
     }
 
 
@@ -145,15 +144,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             // Snack Bar to show success message that record saved successfully
             Snackbar.make(findViewById(android.R.id.content), getString(R.string.success_message), Snackbar.LENGTH_LONG).show();
             emptyInputEditText();
-            finish();
-
+            // finish();
 
         } else {
             // Snack Bar to show error message that record already exists
             Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_email_exists), Snackbar.LENGTH_LONG).show();
         }
-
-
     }
 
     /**
