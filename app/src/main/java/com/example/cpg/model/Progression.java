@@ -1,5 +1,11 @@
 package com.example.cpg.model;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
 
+import static androidx.room.ForeignKey.CASCADE;
+
+/*
 public class Progression {
 
     private int id;
@@ -99,4 +105,17 @@ public class Progression {
         this.userId = userId;
 
     }
+}
+*/
+@Entity(foreignKeys = @ForeignKey(entity = User.class,
+        parentColumns = "id",
+        childColumns = "userId",
+        onDelete = CASCADE))
+public class Progression{
+    @PrimaryKey private int id;
+    private int userId;
+    private String name;
+    private String progressionPath;
+
+
 }
