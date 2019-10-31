@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.cpg.helpers.MidiWrapper;
+import com.example.cpg.helpers.MIDI.MidiGenerator;
 import com.example.cpg.sql.DatabaseHelper;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mDeleteAccountButton;
     private Button mUserListButton;
 
-    private MidiWrapper midiWrapper;
+    private MidiGenerator midiGenerator;
     private MediaPlayer player;
 
     private DatabaseHelper userInfo;
@@ -83,44 +83,13 @@ public class MainActivity extends AppCompatActivity {
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Play a playlist
-                //mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
-
-
                 //Create and play midi file
-                midiWrapper = new MidiWrapper();
-                midiWrapper.writeProg(getApplicationContext());
+                midiGenerator = new MidiGenerator();
+                midiGenerator.writeTestFile(getApplicationContext());
                 File cacheDir = getCacheDir();
                 File midout = new File(cacheDir + "/midout.mid");
-
-                //midout.setReadable(true, false);
-                FileInputStream fileInputStream = null;
-                try {
-                    fileInputStream = new FileInputStream(midout);
-                    if(fileInputStream.getFD().valid()){
-                        player = new MediaPlayer();
-                    }
-                    //player = MediaPlayer.create(getApplicationContext(), uriFromParse);
-                    player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    player.setDataSource(fileInputStream.getFD());
-                    fileInputStream.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    player.prepare();
-                } catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
                 player.start();
-
             }
         });
 
