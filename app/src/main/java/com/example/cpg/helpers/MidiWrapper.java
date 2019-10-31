@@ -39,7 +39,7 @@ public class MidiWrapper {
         final int NOTE_COUNT = 40;
         for(int i = 0; i < NOTE_COUNT; i++){
             int channel = 0;
-            int pitch = 1 + i;
+            int pitch = 50 + i;
             int velocity = 100;
             long tick = i * 480;
             long duration = 120;
@@ -48,11 +48,11 @@ public class MidiWrapper {
         }
 
         //Create MidiFile
-        List<MidiTrack> tracks = new ArrayList<MidiTrack>();
+        ArrayList<MidiTrack> tracks = new ArrayList<MidiTrack>();
         tracks.add(tempoTrack);
         tracks.add(noteTrack);
 
-        MidiFile midi = new MidiFile(MidiFile.DEFAULT_RESOLUTION);
+        MidiFile midi = new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
         File midout = null;
         //Write midi to file
         File outputDir = context.getCacheDir();

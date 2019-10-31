@@ -32,7 +32,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 File cacheDir = getCacheDir();
                 File midout = new File(cacheDir + "/midout.mid");
 
-                midout.setReadable(true, false);
+                //midout.setReadable(true, false);
                 FileInputStream fileInputStream = null;
                 try {
                     fileInputStream = new FileInputStream(midout);
