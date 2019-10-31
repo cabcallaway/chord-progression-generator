@@ -8,10 +8,12 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.example.cpg.adapters.UsersRecyclerAdapter;
+import com.example.cpg.dao.UserDao;
 import com.example.cpg.model.User;
-import com.example.cpg.sql.DatabaseHelper;
+//import com.example.cpg.sql.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,9 @@ public class UsersListActivity extends AppCompatActivity {
     private RecyclerView recyclerViewUsers;
     private List<User> listUsers;
     private UsersRecyclerAdapter usersRecyclerAdapter;
-    private DatabaseHelper databaseHelper;
+    //private DatabaseHelper databaseHelper;
+    private UserDao userDao;
+    private AppDatabase database;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +59,11 @@ public class UsersListActivity extends AppCompatActivity {
         recyclerViewUsers.setItemAnimator(new DefaultItemAnimator());
         recyclerViewUsers.setHasFixedSize(true);
         recyclerViewUsers.setAdapter(usersRecyclerAdapter);
-        databaseHelper = new DatabaseHelper(activity);
+        //databaseHelper = new DatabaseHelper(activity);
+        database = Room.databaseBuilder(this, AppDatabase.class, "mydb")
+                .allowMainThreadQueries()
+                .build();
+        userDao = database.getUserDao();
 
         String emailFromIntent = getIntent().getStringExtra("EMAIL");
         textViewName.setText(emailFromIntent);
@@ -72,7 +80,7 @@ public class UsersListActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 listUsers.clear();
-                listUsers.addAll(databaseHelper.getAllUser());
+                listUsers.addAll(userDao.getAllUsers());
 
                 return null;
             }

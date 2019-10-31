@@ -3,7 +3,8 @@ package com.example.cpg;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 
-import com.example.cpg.sql.DatabaseHelper;
+//import com.example.cpg.sql.DatabaseHelper;
+import com.example.cpg.dao.UserDao;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -12,6 +13,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.room.Room;
 
 import android.os.Handler;
 import android.view.View;
@@ -24,6 +26,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private final AppCompatActivity activity = RegisterActivity.this;
 
     private NestedScrollView nestedScrollView;
+
+    private AppDatabase database;
 
     private TextInputLayout textInputLayoutName;
     private TextInputLayout textInputLayoutEmail;
@@ -39,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private AppCompatTextView appCompatTextViewLoginLink;
 
     private InputValidation inputValidation;
-    private DatabaseHelper databaseHelper;
+    private UserDao userDao;
     private User user;
 
     @Override
@@ -88,7 +92,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
      */
     private void initObjects() {
         inputValidation = new InputValidation(activity);
-        databaseHelper = new DatabaseHelper(activity);
+        database = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        userDao = database.getUserDao();
         user = new User();
     }
 
@@ -133,13 +138,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        if (!databaseHelper.checkUser(textInputEditTextEmail.getText().toString().trim())) {
+        //if (!userDao.checkUser(textInputEditTextEmail.getText().toString().trim())) {
+        if (userDao.checkUser(textInputEditTextEmail.getText().toString().trim()) == 0) {
+
 
             user.setName(textInputEditTextName.getText().toString().trim());
             user.setEmail(textInputEditTextEmail.getText().toString().trim());
             user.setPassword(textInputEditTextPassword.getText().toString().trim());
 
-            databaseHelper.addUser(user);
+            //databaseHelper.addUser(user);
+            userDao.insert(user);
 
             // Snack Bar to show success message that record saved successfully
             Snackbar.make(findViewById(android.R.id.content), getString(R.string.success_message), Snackbar.LENGTH_LONG).show();

@@ -5,117 +5,62 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-/*
+@Entity(foreignKeys = @ForeignKey(entity = User.class,
+        parentColumns = "id",
+        childColumns = "userId",
+        onDelete = CASCADE))
 public class Progression {
-
-    private int id;
-
-    private int lengthInBars;
-
-    private String musicalKey;
-
-    private int tempo;
-
-    private String instrument;
-
-    private String beat;
-
-    //this is a FOREIGN KEY to the User table
+    @PrimaryKey private int id;
     private int userId;
+    private String name;
+    private String path;
 
-    public int getProgId() {
+    public int getId() {
 
         return id;
 
     }
 
-    public void setProgId(int id) {
+    public void setId(int id){
 
         this.id = id;
 
     }
 
-    public int getLengthInBars() {
-
-        return lengthInBars;
-
-    }
-
-    public void setLengthInBars(int len) {
-
-        this.lengthInBars = len;
-
-    }
-
-    public String getMusicalKey() {
-
-        return musicalKey;
-
-    }
-
-    public void setMusicalKey(String key) {
-
-        this.musicalKey = key;
-
-    }
-
-    public int getTempo() {
-
-        return tempo;
-
-    }
-
-    public void setTempo(int tempo) {
-
-        this.tempo = tempo;
-
-    }
-
-    public String getInstrument() {
-
-        return instrument;
-
-    }
-
-    public void setInstrument(String instrument) {
-
-        this.instrument = instrument;
-
-    }
-
-    public String getBeat(){
-
-        return beat;
-
-    }
-
-    public void setBeat(String beat) {
-
-        this.beat = beat;
-
-    }
-
-    public int getUserId(){
+    public int getUserId() {
 
         return userId;
-    }
-
-    public void setUserId(int userId){
-
-        this.userId = userId;
 
     }
-}
-*/
-@Entity(foreignKeys = @ForeignKey(entity = User.class,
-        parentColumns = "id",
-        childColumns = "userId",
-        onDelete = CASCADE))
-public class Progression{
-    @PrimaryKey private int id;
-    private int userId;
-    private String name;
-    private String progressionPath;
 
+    public void setUserId(int id){
+
+        this.userId = id;
+
+    }
+
+    public String getName() {
+
+        return name;
+
+    }
+
+    public void setName(String name) {
+
+        this.name = name;
+
+    }
+
+    public String getPath(){
+
+        return path;
+
+    }
+
+    public void setPath(String path) {
+
+        this.path = path;
+
+    }
 
 }

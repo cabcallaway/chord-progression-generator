@@ -5,13 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.cpg.sql.DatabaseHelper;
+//import com.example.cpg.sql.DatabaseHelper;
+import com.example.cpg.dao.UserDao;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.room.Room;
 
 import android.view.View;
 
@@ -19,6 +21,8 @@ import com.example.cpg.helpers.InputValidation;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = LoginActivity.this;
+
+    private AppDatabase database;
 
     private NestedScrollView nestedScrollView;
 
@@ -33,7 +37,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private AppCompatTextView textViewLinkRegister;
 
     private InputValidation inputValidation;
-    private DatabaseHelper databaseHelper;
+    //private DatabaseHelper databaseHelper;
+
+    private UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * This method is to initialize objects to be used
      */
     private void initObjects() {
-        databaseHelper = new DatabaseHelper(activity);
+        database = AppDatabase.getInMemoryDatabase(getApplicationContext());
         inputValidation = new InputValidation(activity);
 
     }
@@ -115,9 +121,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        if (databaseHelper.checkUser(textInputEditTextEmail.getText().toString().trim()
-                , textInputEditTextPassword.getText().toString().trim())) {
-
+        //if (userDao.checkUser(textInputEditTextEmail.getText().toString().trim()
+                //, textInputEditTextPassword.getText().toString().trim())) {
+        if (userDao.checkUser(textInputEditTextEmail.getText().toString().trim()
+                , textInputEditTextPassword.getText().toString().trim()) == 1) {
 
             //Intent accountsIntent = new Intent(activity, UsersListActivity.class);
             //accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());

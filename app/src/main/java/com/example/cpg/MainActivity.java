@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.room.Room;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.cpg.sql.DatabaseHelper;
+import com.example.cpg.dao.UserDao;
+//import com.example.cpg.sql.DatabaseHelper;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -21,6 +23,7 @@ import com.spotify.android.appremote.api.SpotifyAppRemote;
 import com.spotify.protocol.types.Track;
 
 import com.example.cpg.model.User;
+import com.example.cpg.AppDatabase;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -38,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private Button mDeleteAccountButton;
     private Button mUserListButton;
 
-    private DatabaseHelper userInfo;
+    //private DatabaseHelper userInfo;
+    private UserDao userDao;
+    private AppDatabase database;
     private User user;
 
     private AppCompatTextView textViewName;
@@ -52,10 +57,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        database = AppDatabase.getInMemoryDatabase(getApplicationContext());
+
         // Grab the logged in user's email
         String emailFromIntent = getIntent().getStringExtra("EMAIL");
 
-        userInfo = new DatabaseHelper(activity);
+        //userInfo = new DatabaseHelper(activity);
+        userDao = database.getUserDao();
         user = new User();
 
         mPlayButton = (Button) findViewById(R.id.play_button);
@@ -65,24 +73,28 @@ public class MainActivity extends AppCompatActivity {
         mUserListButton = (Button) findViewById(R.id.user_list_button);
 
         mPlayButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 // Play a playlist
                 mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
             }
+
         });
         mPauseButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 mSpotifyAppRemote.getPlayerApi().pause();
             }
+
         });
         mUpdateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 user.setEmail(emailFromIntent);
-                user = userInfo.getUserByEmail(emailFromIntent);
+                user = userDao.getUserByEmail(emailFromIntent);
 
                 final AlertDialog.Builder inputAlert = new AlertDialog.Builder(context);
                 inputAlert.setTitle("Update your account information");
@@ -94,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String userInputValue = userInput.getText().toString();
                         user.setEmail(userInputValue);
-                        userInfo.updateUser(user);
+                        userDao.update(user);
                         finish();
                     }
                 });
@@ -112,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 user.setEmail(emailFromIntent);
-                user = userInfo.getUserByEmail(emailFromIntent);
-                userInfo.deleteUser(user);
+                user = userDao.getUserByEmail(emailFromIntent);
+                userDao.delete(user);
                 finish();
             }
         });
@@ -131,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         Log.d("MainActivity","ONSTART TRIGGERED");
         super.onStart();
+
         ConnectionParams connectionParams =
                 new ConnectionParams.Builder(CLIENT_ID)
                         .setRedirectUri(REDIRECT_URI)
@@ -155,10 +168,13 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("MainActivity", "FAILED");
                     }
                 });
+
+
     }
 
     private void connected() {
         // Subscribe to PlayerState
+
         mSpotifyAppRemote.getPlayerApi()
                 .subscribeToPlayerState()
                 .setEventCallback(playerState -> {
@@ -167,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("MainActivity", track.name + " by " + track.artist.name);
                     }
                 });
+
     }
 
     @Override
