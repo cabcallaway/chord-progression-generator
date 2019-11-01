@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * This method is to initialize objects to be used
      */
     private void initObjects() {
-        database = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        database = AppDatabase.getInstance(getApplicationContext());
         userDao = database.getUserDao();
         inputValidation = new InputValidation(activity);
 

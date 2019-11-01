@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        database = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        database = AppDatabase.getInstance(getApplicationContext());
 
         // Grab the logged in user's email
         String emailFromIntent = getIntent().getStringExtra("EMAIL");

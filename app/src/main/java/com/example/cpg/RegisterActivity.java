@@ -92,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
      */
     private void initObjects() {
         inputValidation = new InputValidation(activity);
-        database = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        database = AppDatabase.getInstance(getApplicationContext());
         userDao = database.getUserDao();
         user = new User();
     }

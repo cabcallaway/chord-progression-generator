@@ -20,10 +20,10 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ProgressionDao getProgressionDao();
 
-    public static AppDatabase getInMemoryDatabase(Context context) {
+    public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.inMemoryDatabaseBuilder(context.getApplicationContext(), AppDatabase.class).allowMainThreadQueries().build();
+                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app-database.db").allowMainThreadQueries().build();
         }
         return INSTANCE;
     }
