@@ -141,7 +141,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //if (!userDao.checkUser(textInputEditTextEmail.getText().toString().trim())) {
         if (userDao.checkUser(textInputEditTextEmail.getText().toString().trim()) == 0) {
 
-
+            //user.setId();
             user.setName(textInputEditTextName.getText().toString().trim());
             user.setEmail(textInputEditTextEmail.getText().toString().trim());
             user.setPassword(textInputEditTextPassword.getText().toString().trim());

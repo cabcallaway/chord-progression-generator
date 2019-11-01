@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 //import com.example.cpg.sql.DatabaseHelper;
 import com.example.cpg.dao.UserDao;
+import com.example.cpg.model.User;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -84,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void initObjects() {
         database = AppDatabase.getInMemoryDatabase(getApplicationContext());
+        userDao = database.getUserDao();
         inputValidation = new InputValidation(activity);
 
     }
