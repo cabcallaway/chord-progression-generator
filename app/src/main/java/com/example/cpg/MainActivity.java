@@ -21,6 +21,7 @@ import android.widget.EditText;
 import com.example.cpg.dao.UserDao;
 import com.example.cpg.helpers.MIDI.MidiGenerator;
 //import com.example.cpg.sql.DatabaseHelper;
+import com.example.cpg.model.Progression;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -68,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("MainActivity","ONCREATE TRIGGERED");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -87,26 +87,46 @@ public class MainActivity extends AppCompatActivity {
         mDeleteAccountButton = (Button) findViewById(R.id.delete_account_button);
         mUserListButton = (Button) findViewById(R.id.user_list_button);
 
-        //Right now just creates and plays a midi file with progression F Fm C C
+        //TODO: Make the chords be loaded from view
+        //Initial chords loaded into the progression.
+        //Will be changed by clickListeners on each bar in the progression
+        Progression progression = new Progression();
+        Progression oldProgression;
+        progression.addChord("F");
+        progression.addChord("Fm");
+        progression.addChord("C");
+        progression.addChord("C");
+        progression.setLength(4);
+        oldProgression = progression.copy();
+
+        //Generate midi file and play it given the chords in the progression
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Create and play midi file
-                midiGenerator = new MidiGenerator();
-                midiGenerator.writeTestFile(getApplicationContext());
-                File cacheDir = getCacheDir();
-                File midout = new File(cacheDir + "/midout.mid");
-                player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
-                player.start();
+                //If user hits play while already playing an progression, restart if same progression, or rebuild midi if different
+                if(player.isPlaying()){
+                        player.stop();
+                    }
+                    if(progression.sameProg(oldProgression)){
+                        player.start();
+                    } else {
+                        //Write the midi file
+                        File midout = new File(getCacheDir() + "/midout.mid");
+                        midiGenerator = new MidiGenerator();
+                        midiGenerator.writeProgression(MainActivity.this, progression);
+                        //Create the media player
+                        player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
+                        //TODO: make loop fluid (look at tempo and adjust or add silent note? - investigate midi file in ableton)
+                        player.setLooping(true);
+                        player.start();
+                    }
             }
         });
 
         mPauseButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
-                mSpotifyAppRemote.getPlayerApi().pause();
-            }
+            public void onClick(View v) { player.pause(); }
 
         });
 

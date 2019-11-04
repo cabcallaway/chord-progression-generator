@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //DELETE AFTER DEBUGGING
-        Intent accountsIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(accountsIntent);
+        Intent main = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(main);
 
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();

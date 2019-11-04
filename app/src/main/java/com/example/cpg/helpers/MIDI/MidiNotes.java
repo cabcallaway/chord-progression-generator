@@ -3,11 +3,11 @@ package com.example.cpg.helpers.MIDI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//Notes Class gives ability to get midi note numbers corresponding to note names
-public class Notes {
+//MidiNotes Class gives ability to get midi note numbers corresponding to note names
+public class MidiNotes {
 
     //Sub class defining an input note string by the string and octave number
-    class InputString{
+    static class InputString{
         String note;
         int octave;
         InputString(String s){
@@ -16,10 +16,11 @@ public class Notes {
             Matcher m = p.matcher(s);
             if(m.find()){
                 octave = Integer.parseInt(m.group());
+                note = s.replace(m.group(), "");
             } else{
                 octave = 4;
+                note = s;
             }
-            note = s.replace(m.group(), "");
         }
     }
 
@@ -55,7 +56,7 @@ public class Notes {
     }
 
     //Transposes the note to the correct octave
-    private int transpose(int n, int octave){
+    private static int transpose(int n, int octave){
         int midiNote = n;
         if(octave < 0 || octave > 9){
             throw new IllegalArgumentException("Please use octave between 0 and 9");
@@ -67,11 +68,11 @@ public class Notes {
     }
 
     //Returns the midi note number associated with the given note
-    public int getNote(String note){
+    public static int getNote(String note){
         InputString input = new InputString(note);
 
         if(input.note.contains("#")){
-            input.note.replace("#", "sh");
+            input.note = input.note.replace("#", "sh");
         }
         Note n = Note.valueOf(input.note);
 
