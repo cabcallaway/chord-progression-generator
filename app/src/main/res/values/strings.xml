@@ -10,6 +10,33 @@
     <string name="delete_account_button">Delete Account</string>
     <string name="update_account_button">Update Account</string>
 
+    // EditChordFragment strings
+    <string name="select_chord">Select Chord:</string>
+    <string name="chord_type">Chord Type:</string>
+    <string name="c_note">C</string>
+    <string name="csh_note">C#</string>
+    <string name="db_note">Db</string>
+    <string name="d_note">D</string>
+    <string name="dsh_note">D#</string>
+    <string name="eb_note">Eb</string>
+    <string name="e_note">E</string>
+    <string name="f_note">F</string>
+    <string name="fsh_note">F#</string>
+    <string name="gb_note">Gb</string>
+    <string name="g_note">G</string>
+    <string name="gsh_note">G#</string>
+    <string name="ab_note">Ab</string>
+    <string name="a_note">A</string>
+    <string name="ash_note">A#</string>
+    <string name="bb_note">Bb</string>
+    <string name="b_note">B</string>
+    <string name="major_type">M</string>
+    <string name="minor_type">m</string>
+    <string name="seven_type">7</string>
+    <string name="major7_type">M7</string>
+    <string name="minor7_type">m7</string>
+    <string name="dim_type">dim</string>
+
     // LoginActivity strings
     <string name="login_app_name">Login Register</string>
     <string name="text_accounts">All Accounts</string>
@@ -32,4 +59,7 @@
     <string name="action_settings">Settings</string>
     <string name="text_hello">Hello,</string>
     <string name="text_title">SQLite Database Overview</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
