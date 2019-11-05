@@ -4,6 +4,8 @@ import android.content.Context;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.room.Room;
 
 import android.content.DialogInterface;
@@ -54,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private Button mDeleteAccountButton;
     private Button mUserListButton;
 
+    private Button mAddChordButton;
+    private Button mSubtractChordButton;
+
     private MidiGenerator midiGenerator;
     private MediaPlayer player;
 
@@ -72,6 +77,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+
+        if (fragment == null) {
+            fragment = new ProgressionFragment();
+            fm.beginTransaction()
+                    .add(R.id.fragment_container, fragment)
+                    .commit();
+        }
+
         database = AppDatabase.getInstance(getApplicationContext());
 
         // Grab the logged in user's email
@@ -80,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
         //userInfo = new DatabaseHelper(activity);
         userDao = database.getUserDao();
         user = new User();
+
+        mAddChordButton = (Button) findViewById(R.id.add_chord);
+        mSubtractChordButton = (Button) findViewById(R.id.subtract_chord);
 
         mPlayButton = (Button) findViewById(R.id.play_button);
         mPauseButton = (Button) findViewById(R.id.pause_button);
