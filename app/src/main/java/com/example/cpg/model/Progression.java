@@ -4,6 +4,7 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static androidx.room.ForeignKey.CASCADE;
 
@@ -15,16 +16,19 @@ import static androidx.room.ForeignKey.CASCADE;
 public class Progression {
     @PrimaryKey private int id;
     private int userId;
-    private int length = 0;
     private String name;
     private String path;
-    //private ArrayList<String> chords;
-    private ArrayList<Chord> chords;
+    private List<Chord> chords;
+
+    //Constructor
+    public Progression(){
+        chords = new ArrayList<>();
+    }
+
 
     public Progression copy(){
         Progression c = new Progression();
         c.userId = this.userId;
-        c.length = this.length;
         c.name = this.name;
         c.path = this.path;
         c.chords = this.chords;
@@ -34,7 +38,6 @@ public class Progression {
     public boolean sameProg(Progression p){
         return
                 this.userId == p.userId &&
-                this.length == p.length &&
                 this.name.equals(p.name) &&
                 this.path.equals(p.path) &&
                 this.chords.equals(p.chords);
@@ -64,14 +67,6 @@ public class Progression {
 
     }
 
-    public int getLength(){
-        return this.length;
-    }
-
-    public void setLength(int l){
-        this.length = l;
-    }
-
     public String getName() {
 
         return name;
@@ -96,6 +91,10 @@ public class Progression {
 
     }
 
+    public int getLength(){
+        return this.chords.size();
+    }
+
     /*
     public void addChord(String chordName){
         this.chords.add(chordName);
@@ -112,19 +111,16 @@ public class Progression {
     }
     */
 
-    public void updateChord(Chord chord) {
-
+    public void addChord(Chord chord) {
         this.chords.add(chord);
-
     }
 
-    public void setChords(ArrayList<Chord> chords){
-
+    public void setChords(List<Chord> chords){
         this.chords = chords;
 
     }
 
-    public ArrayList<Chord> getChords() {
+    public List<Chord> getChords() {
 
         return this.chords;
 

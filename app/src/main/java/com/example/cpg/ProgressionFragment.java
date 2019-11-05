@@ -1,7 +1,7 @@
 package com.example.cpg;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -14,6 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.cpg.ViewModels.ProgressionViewModel;
+import com.example.cpg.model.Chord;
+import com.example.cpg.model.Progression;
+
+import java.util.List;
 
 public class ProgressionFragment extends Fragment {
 
@@ -32,14 +38,24 @@ public class ProgressionFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.progression_fragment, container, false);
 
-        mAddChordButton = (Button)view.findViewById(R.id.add_chord);
-        mSubtractChordButton = (Button)view.findViewById(R.id.subtract_chord);
-        mChord1Button = (Button)view.findViewById(R.id.CH1);
-        mChord2Button = (Button)view.findViewById(R.id.CH2);
-        mChord3Button = (Button)view.findViewById(R.id.CH3);
-        mChord4Button = (Button)view.findViewById(R.id.CH4);
-        mChord5Button = (Button)view.findViewById(R.id.CH5);
-        mChord6Button = (Button)view.findViewById(R.id.CH6);
+
+        //Set up the PROGRESSION VIEW MODEL
+        mViewModel = ViewModelProviders.of(this).get(ProgressionViewModel.class);
+        mViewModel.getProgression().observe(this, new Observer<Progression>() {
+            @Override
+            public void onChanged(@Nullable Progression progression) {
+
+            }
+        });
+
+        mAddChordButton = view.findViewById(R.id.add_chord);
+        mSubtractChordButton = view.findViewById(R.id.subtract_chord);
+        mChord2Button = view.findViewById(R.id.CH2);
+        mChord1Button = view.findViewById(R.id.CH1);
+        mChord3Button = view.findViewById(R.id.CH3);
+        mChord4Button = view.findViewById(R.id.CH4);
+        mChord5Button = view.findViewById(R.id.CH5);
+        mChord6Button = view.findViewById(R.id.CH6);
 
         // Start with only 4 visible chords
         mChord5Button.setVisibility(View.GONE);

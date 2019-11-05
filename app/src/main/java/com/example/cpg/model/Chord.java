@@ -6,6 +6,21 @@ public class Chord {
     private int lengthInBars;
     private String type;
 
+
+    public Chord(String name, int lengthInBars){
+        this.name = name;
+        this.lengthInBars = lengthInBars;
+        if(name.contains("m7")){
+            this.type = "min7";
+        } else if(name.contains("m")){
+            this.type = "min";
+        } else if(name.contains("7")){
+            this.type = "7";
+        } else{
+            this.type = "maj";
+        }
+    }
+
     public String getChordName(){
 
         return name;

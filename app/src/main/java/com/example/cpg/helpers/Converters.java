@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 /*
 Type Converter class used by Room to convert ArrayList<Chord> back and forth for storage in SQLite DB.
@@ -15,7 +16,7 @@ Type Converter class used by Room to convert ArrayList<Chord> back and forth for
 public class Converters {
 
     @TypeConverter
-    public static ArrayList<Chord> toChordsFromString(String value) {
+    public static List<Chord> toChordsFromString(String value) {
 
         Type listType = new TypeToken<ArrayList<Chord>>(){}.getType();
 
@@ -24,7 +25,7 @@ public class Converters {
     }
 
     @TypeConverter
-    public static String toStringFromArrayList(ArrayList<Chord> list) {
+    public static String toStringFromArrayList(List<Chord> list) {
 
         Gson gsonObject = new Gson();
 

@@ -15,6 +15,7 @@ import com.example.cpg.dao.UserDao;
 
 @Database(entities = {User.class, Progression.class}, version = 3)
 @TypeConverters({Converters.class})
+
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

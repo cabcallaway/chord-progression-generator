@@ -1,28 +1,30 @@
 package com.example.cpg;
 
 import android.content.Context;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.room.Room;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.cpg.ViewModels.ProgressionViewModel;
 import com.example.cpg.dao.UserDao;
 import com.example.cpg.helpers.MIDI.MidiGenerator;
-//import com.example.cpg.sql.DatabaseHelper;
 import com.example.cpg.model.Progression;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -31,16 +33,10 @@ import com.spotify.android.appremote.api.SpotifyAppRemote;
 import com.spotify.protocol.types.Track;
 
 import com.example.cpg.model.User;
-import com.example.cpg.AppDatabase;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
     private Button mUpdateAccountButton;
     private Button mDeleteAccountButton;
     private Button mUserListButton;
-
-    private Button mAddChordButton;
-    private Button mSubtractChordButton;
 
     private MidiGenerator midiGenerator;
     private MediaPlayer player;
@@ -77,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Load the progression fragment
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-
         if (fragment == null) {
             fragment = new ProgressionFragment();
             fm.beginTransaction()
@@ -87,41 +80,38 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
+        //Init the database
         database = AppDatabase.getInstance(getApplicationContext());
 
-        // Grab the logged in user's email
+        //Get currently logged in user
         String emailFromIntent = getIntent().getStringExtra("EMAIL");
-
         //userInfo = new DatabaseHelper(activity);
         userDao = database.getUserDao();
         user = new User();
 
-        mAddChordButton = (Button) findViewById(R.id.add_chord);
-        mSubtractChordButton = (Button) findViewById(R.id.subtract_chord);
+        //Initializer all buttons
+        mPlayButton = findViewById(R.id.play_button);
+        mPauseButton = findViewById(R.id.pause_button);
+        mUpdateAccountButton = findViewById(R.id.update_account_button);
+        mDeleteAccountButton = findViewById(R.id.delete_account_button);
+        mUserListButton = findViewById(R.id.user_list_button);
 
-        mPlayButton = (Button) findViewById(R.id.play_button);
-        mPauseButton = (Button) findViewById(R.id.pause_button);
-        mUpdateAccountButton = (Button) findViewById(R.id.update_account_button);
-        mDeleteAccountButton = (Button) findViewById(R.id.delete_account_button);
-        mUserListButton = (Button) findViewById(R.id.user_list_button);
 
-        //TODO: Make the chords be loaded from view
-        //TODO: Change logic to use Chord objects instead of string name
+        //Load The progression view model to gain access to liveData
+        ProgressionViewModel pViewModel = ViewModelProviders.of(this).get(ProgressionViewModel.class);
+        //Gets the initially loaded progression to check against later
+        Progression oldProgression = pViewModel.getProgression().getValue();
+
+        //TODO: Make the chords be loaded to/from view
         //Initial chords loaded into the progression.
         //Will be changed by clickListeners on each bar in the progression
-        Progression progression = new Progression();
-        Progression oldProgression;
-        //progression.addChord("F");
-        //progression.addChord("Fm");
-        //progression.addChord("C");
-        //progression.addChord("C");
-        progression.setLength(4);
-        oldProgression = progression.copy();
 
         //Generate midi file and play it given the chords in the progression
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Gets the currently active progression
+                Progression progression = pViewModel.getProgression().getValue();
                 //If user hits play while already playing an progression, restart if same progression, or rebuild midi if different
                 if(player.isPlaying()){
                         player.stop();

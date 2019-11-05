@@ -139,10 +139,10 @@ public class MidiGenerator {
 
     //TODO: Just use chord type patters.
     //TODO:
-    // MAJ: 4-3
-    // MIN: 3-4
-    // MAJ7: 4-3-4
-    // MIN7: 3-4-3
+    // MAJ      : 4-3
+    // MIN(m)   : 3-4
+    // MAJ7(7)  : 4-3-4
+    // MIN7(m7) : 3-4-3
 
     private void writeF(int bar, MidiTrack track){
         String[] notesF= {"F3", "F4", "A4", "C4"};
