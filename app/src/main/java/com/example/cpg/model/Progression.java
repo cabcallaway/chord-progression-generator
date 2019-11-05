@@ -18,7 +18,8 @@ public class Progression {
     private int length = 0;
     private String name;
     private String path;
-    private ArrayList<String> chords;
+    //private ArrayList<String> chords;
+    private ArrayList<Chord> chords;
 
     public Progression copy(){
         Progression c = new Progression();
@@ -95,6 +96,7 @@ public class Progression {
 
     }
 
+    /*
     public void addChord(String chordName){
         this.chords.add(chordName);
         this.length ++;
@@ -107,6 +109,25 @@ public class Progression {
 
     public void updateChord(int index, String chord){
         this.chords.set(index, chord);
+    }
+    */
+
+    public void updateChord(Chord chord) {
+
+        this.chords.add(chord);
+
+    }
+
+    public void setChords(ArrayList<Chord> chords){
+
+        this.chords = chords;
+
+    }
+
+    public ArrayList<Chord> getChords() {
+
+        return this.chords;
+
     }
 
 }

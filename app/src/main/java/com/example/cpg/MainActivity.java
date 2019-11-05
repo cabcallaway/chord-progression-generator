@@ -88,14 +88,15 @@ public class MainActivity extends AppCompatActivity {
         mUserListButton = (Button) findViewById(R.id.user_list_button);
 
         //TODO: Make the chords be loaded from view
+        //TODO: Change logic to use Chord objects instead of string name
         //Initial chords loaded into the progression.
         //Will be changed by clickListeners on each bar in the progression
         Progression progression = new Progression();
         Progression oldProgression;
-        progression.addChord("F");
-        progression.addChord("Fm");
-        progression.addChord("C");
-        progression.addChord("C");
+        //progression.addChord("F");
+        //progression.addChord("Fm");
+        //progression.addChord("C");
+        //progression.addChord("C");
         progression.setLength(4);
         oldProgression = progression.copy();
 
