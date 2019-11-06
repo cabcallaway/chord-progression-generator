@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.cpg.viewModels.ProgressionViewModel" />
+    </data>
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -74,7 +79,7 @@
                     android:layout_height="80dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginLeft="24dp"
-                    android:text="F"
+                    android:text="@{viewmodel.getChord(0).chordName}"
                     android:textAllCaps="false"
                     app:layout_constraintEnd_toStartOf="@+id/CH2"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -140,5 +145,5 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </FrameLayout>
+</layout>

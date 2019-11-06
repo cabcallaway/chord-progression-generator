@@ -77,7 +77,6 @@ public class MidiGenerator {
         }
     }
 
-    //TODO: Just use chord type patters.
     //TODO:
     // MAJ      : 4-3
     // MIN(m)   : 3-4
@@ -123,39 +122,4 @@ public class MidiGenerator {
         }
         return notes;
     }
-
-    private void writeF(int bar, MidiTrack track){
-        String[] notesF= {"F3", "F4", "A4", "C4"};
-        Note n = new Note();
-        for(String note : notesF){
-            n.pitch = MidiNotes.getNote(note);
-            //Quarter note = 480, 1 bar = 4 quarter notes
-            n.tick = bar * (480 * 4);
-            track.insertNote(n.channel, n.pitch, n.velocity, n.tick, n.duration);
-        }
-    }
-
-    private void writeFm(int bar, MidiTrack track){
-        String[] notesF= {"F3", "F4", "Ab4", "C4"};
-        Note n = new Note();
-        for(String note : notesF){
-            n.pitch = MidiNotes.getNote(note);
-            //Quarter note = 480, 1 bar = 4 quarter notes
-            n.tick = bar * (480 * 4);
-            track.insertNote(n.channel, n.pitch, n.velocity, n.tick, n.duration);
-        }
-    }
-
-    private void writeC(int bar, MidiTrack track){
-        String[] notesF= {"C3", "C4", "E4", "G4"};
-        Note n = new Note();
-        for(String note : notesF){
-            n.pitch = MidiNotes.getNote(note);
-            //Quarter note = 480, 1 bar = 4 quarter notes
-            n.tick = bar * (480 * 4);
-            track.insertNote(n.channel, n.pitch, n.velocity, n.tick, n.duration);
-        }
-    }
-
-
 }

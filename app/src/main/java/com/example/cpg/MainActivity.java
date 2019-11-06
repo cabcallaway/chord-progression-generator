@@ -2,15 +2,11 @@ package com.example.cpg;
 
 import android.content.Context;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.DialogInterface;
@@ -22,9 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 
-import com.example.cpg.ViewModels.ProgressionViewModel;
+import com.example.cpg.viewModels.ProgressionViewModel;
 import com.example.cpg.dao.ProgressionDao;
 import com.example.cpg.dao.UserDao;
 import com.example.cpg.helpers.MIDI.MidiGenerator;
@@ -41,8 +36,6 @@ import com.example.cpg.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -79,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Load The progression view model to gain access to liveData
+        ProgressionViewModel pViewModel = ViewModelProviders.of(this).get(ProgressionViewModel.class);
+        //Gets the initially loaded progression to check against later
+        Progression oldProgression = pViewModel.getProgression().getValue();
+
         //Load the progression fragment
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
@@ -109,12 +107,6 @@ public class MainActivity extends AppCompatActivity {
         mUpdateAccountButton = findViewById(R.id.update_account_button);
         mDeleteAccountButton = findViewById(R.id.delete_account_button);
         mUserListButton = findViewById(R.id.user_list_button);
-
-
-        //Load The progression view model to gain access to liveData
-        ProgressionViewModel pViewModel = ViewModelProviders.of(this).get(ProgressionViewModel.class);
-        //Gets the initially loaded progression to check against later
-        Progression oldProgression = pViewModel.getProgression().getValue();
 
         //TODO: Make the chords be loaded to/from view
         //Initial chords loaded into the progression.
@@ -198,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
                         //Progression progression = progressionDao.getProgressionByName(progName);
 
                         Snackbar.make(findViewById(android.R.id.content), progName, Snackbar.LENGTH_LONG).show();
-
                     }
                 });
 

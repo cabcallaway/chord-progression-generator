@@ -49,12 +49,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Intent main = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(main);
 
-        setContentView(R.layout.activity_login);
-        getSupportActionBar().hide();
+        //setContentView(R.layout.activity_login);
+        //getSupportActionBar().hide();
 
-        initViews();
-        initListeners();
-        initObjects();
+        //initViews();
+        //initListeners();
+        //initObjects();
     }
 
     /**
