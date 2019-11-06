@@ -4,6 +4,8 @@
     <string name="welcome">Add Chords Here!</string>
     <string name="play_button">Play</string>
     <string name="pause_button">Pause</string>
+    <string name="save_button">Save</string>
+    <string name="load_button">Load</string>
     <string name="add_chord">+</string>
     <string name="subtract_chord">-</string>
     <string name="list_users_button">View User List</string>

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "2c804dd418c8c1ef84789620f5c2ff5c",
+    "identityHash": "b379a814e5d666df82d3ee581eb7f0ae",
     "entities": [
       {
         "tableName": "User",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "Progression",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `length` INTEGER NOT NULL, `name` TEXT, `path` TEXT, `chords` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`userId`) REFERENCES `User`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `name` TEXT, `path` TEXT, `chords` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`userId`) REFERENCES `User`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -55,12 +55,6 @@
           {
             "fieldPath": "userId",
             "columnName": "userId",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "length",
-            "columnName": "length",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -108,7 +102,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2c804dd418c8c1ef84789620f5c2ff5c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b379a814e5d666df82d3ee581eb7f0ae')"
     ]
   }
 }

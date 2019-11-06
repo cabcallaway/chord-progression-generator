@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mPlayButton;
     private Button mPauseButton;
+    private Button mSaveButton;
+    private Button mLoadButton;
     private Button mUpdateAccountButton;
     private Button mDeleteAccountButton;
     private Button mUserListButton;
@@ -89,9 +91,11 @@ public class MainActivity extends AppCompatActivity {
         userDao = database.getUserDao();
         user = new User();
 
-        //Initializer all buttons
+        //Initialize all buttons
         mPlayButton = findViewById(R.id.play_button);
         mPauseButton = findViewById(R.id.pause_button);
+        mSaveButton = findViewById(R.id.save_button);
+        mLoadButton = findViewById(R.id.load_button);
         mUpdateAccountButton = findViewById(R.id.update_account_button);
         mDeleteAccountButton = findViewById(R.id.delete_account_button);
         mUserListButton = findViewById(R.id.user_list_button);
