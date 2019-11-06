@@ -23,7 +23,7 @@ public interface ProgressionDao {
     @Delete
     public void delete(Progression progression);
 
-    @Query("SELECT chords FROM Progression WHERE id = :id")
-    public ArrayList<Chord> getChordsById(int id);
+    //@Query("SELECT chords FROM Progression WHERE id = :id")
+    //public ArrayList<Chord> getChordsById(int id);
 
 }

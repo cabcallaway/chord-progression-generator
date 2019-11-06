@@ -113,12 +113,12 @@ public class MainActivity extends AppCompatActivity {
                 //Gets the currently active progression
                 Progression progression = pViewModel.getProgression().getValue();
                 //If user hits play while already playing an progression, restart if same progression, or rebuild midi if different
-                if(player.isPlaying()){
+                if(player != null && player.isPlaying()){
                         player.stop();
                     }
-                    if(progression.sameProg(oldProgression)){
-                        player.start();
-                    } else {
+                    //if(oldProgression != null && progression.sameProg(oldProgression)){
+                    //    player.start();
+                    //} else {
                         //Write the midi file
                         File midout = new File(getCacheDir() + "/midout.mid");
                         midiGenerator = new MidiGenerator();
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                         //TODO: make loop fluid (look at tempo and adjust or add silent note? - investigate midi file in ableton)
                         player.setLooping(true);
                         player.start();
-                    }
+                    //}
             }
         });
 
