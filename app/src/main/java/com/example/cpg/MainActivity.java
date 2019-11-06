@@ -23,6 +23,7 @@ import com.example.cpg.dao.ProgressionDao;
 import com.example.cpg.dao.UserDao;
 import com.example.cpg.helpers.MIDI.MidiGenerator;
 import com.example.cpg.model.Progression;
+import com.example.cpg.viewModels.ProgressionViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;

@@ -1,17 +1,11 @@
-package com.example.cpg.ViewModels;
+package com.example.cpg.viewModels;
 
-import android.widget.Button;
-
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.cpg.R;
 import com.example.cpg.model.Chord;
 import com.example.cpg.model.Progression;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProgressionViewModel extends ViewModel {
@@ -52,13 +46,13 @@ public class ProgressionViewModel extends ViewModel {
         if(prog == null){
             //Create the initially loaded progression
             prog = new MutableLiveData<Progression>();
-            /*Progression p = new Progression();
+            Progression p = new Progression();
             p.setName("FFmCC");
             p.addChord(new Chord("F", 1));
             p.addChord(new Chord("Fm", 1));
             p.addChord(new Chord("C", 1));
             p.addChord(new Chord("C", 1));
-            prog.setValue(p);*/
+            prog.setValue(p);
         }
         return prog;
     }

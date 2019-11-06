@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.cpg.viewModels.ProgressionViewModel;
 import com.example.cpg.model.Chord;
 import com.example.cpg.databinding.ProgressionFragmentBinding;
 import com.example.cpg.model.Progression;

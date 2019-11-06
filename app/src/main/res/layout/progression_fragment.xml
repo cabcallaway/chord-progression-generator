@@ -79,7 +79,7 @@
                     android:layout_height="80dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginLeft="24dp"
-                    android:text="@{viewmodel.getChord(0).chordName}"
+                    android:text="F"
                     android:textAllCaps="false"
                     app:layout_constraintEnd_toStartOf="@+id/CH2"
                     app:layout_constraintHorizontal_bias="0.5"
