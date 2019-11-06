@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //DELETE AFTER DEBUGGING
+        //TODO: DELETE AFTER DEBUGGING
         Intent main = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(main);
 

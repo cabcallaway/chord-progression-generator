@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -21,11 +22,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 
 import com.example.cpg.ViewModels.ProgressionViewModel;
+import com.example.cpg.dao.ProgressionDao;
 import com.example.cpg.dao.UserDao;
 import com.example.cpg.helpers.MIDI.MidiGenerator;
 import com.example.cpg.model.Progression;
+import com.google.android.material.snackbar.Snackbar;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -37,6 +41,9 @@ import com.example.cpg.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private MidiGenerator midiGenerator;
     private MediaPlayer player;
 
-    //private DatabaseHelper userInfo;
+    private ProgressionDao progressionDao;
     private UserDao userDao;
     private AppDatabase database;
     private User user;
@@ -90,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
         //userInfo = new DatabaseHelper(activity);
         userDao = database.getUserDao();
         user = new User();
+
+        progressionDao = database.getProgressionDao();
+
 
         //Initialize all buttons
         mPlayButton = findViewById(R.id.play_button);
@@ -143,6 +153,67 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        mSaveButton.setOnClickListener((new View.OnClickListener() {
+
+            //TODO: Get the progression (from Intent?), update database
+            @Override
+            public void onClick(View v) {}
+
+        }));
+
+        mLoadButton.setOnClickListener((new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                //Find the User
+                user = userDao.getUserByEmail(emailFromIntent);
+
+                //Get all of their Progressions the user has given their ID
+                List<String> progressionNames = progressionDao.getAllProgNames(user.getId());
+
+                //List of progressions to display to user
+                String[] items = new String[progressionNames.size()];
+
+                for (int i = 0; i < progressionNames.size(); i++) {
+
+                    // Assign each value to String array
+                    items[i] = progressionNames.get(i);
+
+                }
+
+                //new prompt
+                AlertDialog.Builder loadPrompt = new AlertDialog.Builder(context);
+
+                loadPrompt.setTitle("Please select a Progression: ");
+
+                loadPrompt.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String progName = items[which];
+
+                        //TODO: Set progression to loaded Progression
+                        //Progression progression = progressionDao.getProgressionByName(progName);
+
+                        Snackbar.make(findViewById(android.R.id.content), progName, Snackbar.LENGTH_LONG).show();
+
+                    }
+                });
+
+                loadPrompt.setCancelable(false).setNegativeButton("CANCEL",new DialogInterface.OnClickListener() {
+
+                    @Override  public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+                loadPrompt.create().show();
+
+            }
+        }));
+
+
+        //Update Account Details listeners
         mUpdateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
