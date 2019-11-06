@@ -57,6 +57,12 @@ public class ProgressionViewModel extends ViewModel {
         return prog;
     }
 
+    public void setProgression(Progression progression) {
+
+        prog.setValue(progression);
+
+    }
+
     public MutableLiveData<List<Chord>> getChords(){
         if(chords == null){
             chords = new MutableLiveData<>();

@@ -143,7 +143,11 @@ public class MainActivity extends AppCompatActivity {
         mPauseButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) { player.pause(); }
+            public void onClick(View v) {
+
+                player.pause();
+
+            }
 
         });
 
