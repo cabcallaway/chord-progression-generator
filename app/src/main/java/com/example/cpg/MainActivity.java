@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.cpg.viewModels.ProgressionViewModel;
 import com.example.cpg.dao.ProgressionDao;
 import com.example.cpg.dao.UserDao;
 import com.example.cpg.helpers.MIDI.MidiGenerator;
