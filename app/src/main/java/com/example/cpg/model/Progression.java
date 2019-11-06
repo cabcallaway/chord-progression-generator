@@ -115,6 +115,10 @@ public class Progression {
         this.chords.add(chord);
     }
 
+    public void removeChord(Chord chord) {
+        this.chords.remove(chord);
+    }
+
     public void setChords(List<Chord> chords){
         this.chords = chords;
 

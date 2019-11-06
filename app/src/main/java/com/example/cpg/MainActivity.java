@@ -134,14 +134,16 @@ public class MainActivity extends AppCompatActivity {
                     //    player.start();
                     //} else {
                         //Write the midi file
-                        File midout = new File(getCacheDir() + "/midout.mid");
-                        midiGenerator = new MidiGenerator();
-                        midiGenerator.writeProgression(MainActivity.this, progression);
-                        //Create the media player
-                        player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
-                        //TODO: make loop fluid (look at tempo and adjust or add silent note? - investigate midi file in ableton)
-                        player.setLooping(true);
-                        player.start();
+
+                    //Write the midi file
+                    File midout = new File(getCacheDir() + "/midout.mid");
+                    midiGenerator = new MidiGenerator();
+                    midiGenerator.writeProgression(MainActivity.this, progression);
+                    //Create the media player
+                    player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
+                    //TODO: make loop fluid (look at tempo and adjust or add silent note? - investigate midi file in ableton)
+                    player.setLooping(true);
+                    player.start();
                     //}
             }
         });
