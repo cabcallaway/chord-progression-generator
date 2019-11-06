@@ -74,7 +74,12 @@ public class MidiNotes {
         if(input.note.contains("#")){
             input.note = input.note.replace("#", "sh");
         }
-        Note n = Note.valueOf(input.note);
+        Note n;
+        if(note.contains("sh") || note.contains("b")){
+            n = Note.valueOf(input.note);
+        } else{
+            n = Note.valueOf(input.note.substring(0, 1));
+        }
 
         int midiNote = n.getMidiNote();
         if(input.octave != 4){

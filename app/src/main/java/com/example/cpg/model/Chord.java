@@ -15,7 +15,7 @@ public class Chord {
         } else if(name.contains("m")){
             this.type = "min";
         } else if(name.contains("7")){
-            this.type = "7";
+            this.type = "maj7";
         } else{
             this.type = "maj";
         }

@@ -1,6 +1,6 @@
 package com.example.cpg.helpers.MIDI;
 
-public enum  Chord{
+public enum Chord{
     A("A"),
     Am("Am"),
     A7("A7"),
