@@ -22,6 +22,7 @@ import android.widget.EditText;
 import com.example.cpg.dao.ProgressionDao;
 import com.example.cpg.dao.UserDao;
 import com.example.cpg.helpers.MIDI.MidiGenerator;
+import com.example.cpg.model.Chord;
 import com.example.cpg.model.Progression;
 import com.example.cpg.viewModels.ProgressionViewModel;
 import com.google.android.material.snackbar.Snackbar;
@@ -155,7 +156,28 @@ public class MainActivity extends AppCompatActivity {
 
             //TODO: Get the progression (from Intent?), update database
             @Override
-            public void onClick(View v) {}
+            public void onClick(View v) {
+
+                Progression progression = pViewModel.getProgression().getValue();
+
+                progression.setUserId(userDao.getUserByEmail(emailFromIntent).getId());
+
+                //When swapping chords, Progression name is not accurate
+                List<Chord> chords = progression.getChords();
+
+                StringBuilder sb = new StringBuilder();
+
+                for (Chord chord: chords) {
+
+                    sb.append(chord.getChordName());
+
+                }
+
+                progression.setName(sb.toString());
+
+                progressionDao.insert(progression);
+
+            }
 
         }));
 
@@ -190,8 +212,7 @@ public class MainActivity extends AppCompatActivity {
 
                         String progName = items[which];
 
-                        //TODO: Set progression to loaded Progression
-                        //Progression progression = progressionDao.getProgressionByName(progName);
+                        pViewModel.setProgression(progressionDao.getProgressionByName(progName, user.getId()));
 
                         Snackbar.make(findViewById(android.R.id.content), progName, Snackbar.LENGTH_LONG).show();
                     }

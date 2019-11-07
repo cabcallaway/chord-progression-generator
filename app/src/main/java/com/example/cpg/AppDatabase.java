@@ -13,7 +13,7 @@ import com.example.cpg.model.Progression;
 import com.example.cpg.model.User;
 import com.example.cpg.dao.UserDao;
 
-@Database(entities = {User.class, Progression.class}, version = 3)
+@Database(entities = {User.class, Progression.class}, version = 4)
 @TypeConverters({Converters.class})
 
 public abstract class AppDatabase extends RoomDatabase {
@@ -27,7 +27,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app-database.db").allowMainThreadQueries().build();
+                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app-database.db").fallbackToDestructiveMigration().allowMainThreadQueries().build();
         }
         return INSTANCE;
     }

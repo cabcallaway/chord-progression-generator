@@ -43,7 +43,6 @@ public class ProgressionFragment extends Fragment {
         binding.setViewmodel(mViewModel);
         View view = binding.getRoot();
 
-/*
         mViewModel.getCurrentChord1().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String chordName) {
@@ -71,7 +70,7 @@ public class ProgressionFragment extends Fragment {
                 mChord4Button.setText(chordName);
             }
         });
-*/
+
         mViewModel.getProgression().observe(this, new Observer<Progression>() {
             @Override
             public void onChanged(@Nullable Progression progression) {

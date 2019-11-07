@@ -14,7 +14,7 @@ import static androidx.room.ForeignKey.CASCADE;
         onDelete = CASCADE))
 
 public class Progression {
-    @PrimaryKey private int id;
+    @PrimaryKey(autoGenerate=true) private int id;
     private int userId;
     private String name;
     private String path;

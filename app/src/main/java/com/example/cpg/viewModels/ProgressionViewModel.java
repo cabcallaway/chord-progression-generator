@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.cpg.model.Chord;
 import com.example.cpg.model.Progression;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 
 public class ProgressionViewModel extends ViewModel {
@@ -82,6 +82,14 @@ public class ProgressionViewModel extends ViewModel {
             chords.setValue(p.getChords());
         }
         return prog;
+    }
+
+    public void setProgression(Progression p) {
+
+        prog.setValue(p);
+
+        chords.setValue(p.getChords());
+
     }
 
     public LiveData<List<Chord>> getChords(){
