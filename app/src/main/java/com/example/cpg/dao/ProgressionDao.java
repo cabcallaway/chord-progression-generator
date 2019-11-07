@@ -35,6 +35,9 @@ public interface ProgressionDao {
     @Query("SELECT * FROM Progression WHERE name = :name AND userId = :userId")
     public Progression getProgressionByName(String name, int userId);
 
+    @Query("SELECT COUNT() FROM Progression WHERE id = :id")
+    public int checkProgression(int id);
+
     //@Query("SELECT chords FROM Progression WHERE id = :id")
     //public ArrayList<Chord> getChordsById(int id);
 

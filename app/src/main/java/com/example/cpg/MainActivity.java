@@ -145,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
-                player.pause();
-
+                if (player != null && player.isPlaying()) {
+                    player.pause();
+                }
             }
 
         });
@@ -175,7 +175,15 @@ public class MainActivity extends AppCompatActivity {
 
                 progression.setName(sb.toString());
 
-                progressionDao.insert(progression);
+                //if (progressionDao.checkProgression(progression.getId() == 0) {
+
+                    progressionDao.insert(progression);
+
+                //} else {
+                    // Snack Bar to show error message that record already exists
+                //    Snackbar.make(findViewById(android.R.id.content), "Progression already exists", Snackbar.LENGTH_LONG).show();
+                //}
+
 
             }
 
@@ -213,7 +221,11 @@ public class MainActivity extends AppCompatActivity {
                         String progName = items[which];
 
                         pViewModel.setProgression(progressionDao.getProgressionByName(progName, user.getId()));
-
+                        // Restart activity after progression is loaded to update chord button UI
+                        if (player != null && player.isPlaying()) {
+                            player.stop();
+                        }
+                        Restart();
                         Snackbar.make(findViewById(android.R.id.content), progName, Snackbar.LENGTH_LONG).show();
                     }
                 });
@@ -335,5 +347,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "ONSTOP TRIGGERED");
         super.onStop();
         SpotifyAppRemote.disconnect(mSpotifyAppRemote);
+    }
+
+    public void Restart()
+    {
+        this.recreate();
     }
 }
