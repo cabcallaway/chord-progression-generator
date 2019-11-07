@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         mLoadButton = findViewById(R.id.load_button);
         mUpdateAccountButton = findViewById(R.id.update_account_button);
         mDeleteAccountButton = findViewById(R.id.delete_account_button);
-        mUserListButton = findViewById(R.id.user_list_button);
 
         //Setup Options for Shake Detector (external library)
         ShakeOptions options = new ShakeOptions()
@@ -222,10 +221,11 @@ public class MainActivity extends AppCompatActivity {
                 if (progressionDao.checkProgression(progression.getName(), progression.getUserId()) == 0) {
 
                     progressionDao.insert(progression);
+                    Snackbar.make(findViewById(android.R.id.content), "Progression saved", Snackbar.LENGTH_LONG).show();
 
                 } else {
                     // Snack Bar to show error message that record already exists
-                //    Snackbar.make(findViewById(android.R.id.content), "Progression already exists", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Progression already exists", Snackbar.LENGTH_LONG).show();
                 }
 
 
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
                             player.stop();
                         }
                         Restart();
-                        Snackbar.make(findViewById(android.R.id.content), progName, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(android.R.id.content), "Loaded progression " + progName, Snackbar.LENGTH_LONG).show();
                     }
                 });
 
@@ -330,14 +330,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mUserListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent accountsIntent = new Intent(activity, UsersListActivity.class);
-                accountsIntent.putExtra("EMAIL", emailFromIntent);
-                startActivity(accountsIntent);
-            }
-        });
+
     }
 
     @Override

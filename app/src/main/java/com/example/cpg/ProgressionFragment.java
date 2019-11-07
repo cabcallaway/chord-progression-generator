@@ -22,6 +22,9 @@ import com.example.cpg.viewModels.ProgressionViewModel;
 import com.example.cpg.model.Chord;
 import com.example.cpg.databinding.ProgressionFragmentBinding;
 import com.example.cpg.model.Progression;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 public class ProgressionFragment extends Fragment {
 
@@ -96,12 +99,12 @@ public class ProgressionFragment extends Fragment {
         mAddChordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mChord5Button.getVisibility() == View.GONE) {
+                /*if (mChord5Button.getVisibility() == View.GONE) {
                     mChord5Button.setVisibility(View.VISIBLE);
                 }
                 else if (mChord5Button.getVisibility() == View.VISIBLE && mChord6Button.getVisibility() == View.GONE) {
                     mChord6Button.setVisibility(View.VISIBLE);
-                }
+                }*/
 
             }
         });
@@ -109,12 +112,12 @@ public class ProgressionFragment extends Fragment {
         mSubtractChordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mChord6Button.getVisibility() == View.VISIBLE) {
+                /*if (mChord6Button.getVisibility() == View.VISIBLE) {
                     mChord6Button.setVisibility(View.GONE);
                 }
                 else if (mChord6Button.getVisibility() == View.GONE && mChord5Button.getVisibility() == View.VISIBLE) {
                     mChord5Button.setVisibility(View.GONE);
-                }
+                }*/
             }
         });
 
