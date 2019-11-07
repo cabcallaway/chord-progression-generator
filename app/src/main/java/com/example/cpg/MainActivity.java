@@ -39,6 +39,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.io.File;
 import java.util.List;
 
+import safety.com.br.android_shake_detector.core.ShakeCallback;
+import safety.com.br.android_shake_detector.core.ShakeDetector;
+import safety.com.br.android_shake_detector.core.ShakeOptions;
+
 public class MainActivity extends AppCompatActivity {
 
     private final AppCompatActivity activity = MainActivity.this;
@@ -51,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private Button mPauseButton;
     private Button mSaveButton;
     private Button mLoadButton;
+
+    //ShakeDetector library used to listen for accelerometer changes (Shake to Play!)
+    //https://github.com/tbouron/ShakeDetector
+    private ShakeDetector shakeDetector;
+
     private Button mUpdateAccountButton;
     private Button mDeleteAccountButton;
     private Button mUserListButton;
@@ -108,6 +117,41 @@ public class MainActivity extends AppCompatActivity {
         mUpdateAccountButton = findViewById(R.id.update_account_button);
         mDeleteAccountButton = findViewById(R.id.delete_account_button);
         mUserListButton = findViewById(R.id.user_list_button);
+
+        //Setup Options for Shake Detector (external library)
+        ShakeOptions options = new ShakeOptions()
+                .background(false)
+                .interval(1000)
+                .shakeCount(2)
+                .sensibility(2.0f);
+
+        this.shakeDetector = new ShakeDetector(options).start(this, new ShakeCallback() {
+
+            //Same Logic as Play Button Listener
+            //TODO: Clean up, maybe move into separate function
+            @Override
+            public void onShake() {
+
+                Progression progression = pViewModel.getProgression().getValue();
+
+                //If user hits play while already playing an progression, restart if same progression, or rebuild midi if different
+                if(player != null && player.isPlaying()){
+
+                    player.stop();
+
+                }
+
+                //Write the midi file
+                File midout = new File(getCacheDir() + "/midout.mid");
+                midiGenerator = new MidiGenerator();
+                midiGenerator.writeProgression(MainActivity.this, progression);
+                //Create the media player
+                player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
+                player.setLooping(true);
+                player.start();
+
+            }
+        });
 
         //TODO: Make the chords be loaded to/from view
         //Initial chords loaded into the progression.
@@ -175,14 +219,14 @@ public class MainActivity extends AppCompatActivity {
 
                 progression.setName(sb.toString());
 
-                //if (progressionDao.checkProgression(progression.getId() == 0) {
+                if (progressionDao.checkProgression(progression.getName(), progression.getUserId()) == 0) {
 
                     progressionDao.insert(progression);
 
-                //} else {
+                } else {
                     // Snack Bar to show error message that record already exists
                 //    Snackbar.make(findViewById(android.R.id.content), "Progression already exists", Snackbar.LENGTH_LONG).show();
-                //}
+                }
 
 
             }
