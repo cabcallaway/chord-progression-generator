@@ -30,22 +30,19 @@ public class ProgressionFragment extends Fragment {
     private Button mAddChordButton;
     private Button mSubtractChordButton;
     private Button mChord1Button, mChord2Button, mChord3Button, mChord4Button, mChord5Button, mChord6Button;
-    // Progression to add chords into for the View Model
-    Progression currentProgression = new Progression();
-
     private ProgressionFragmentBinding binding;
-    public static ProgressionFragment newInstance() {
-        return new ProgressionFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.progression_fragment, container, false);
-        View view = binding.getRoot();
 
         //Set up the PROGRESSION VIEW MODEL
-        mViewModel = ViewModelProviders.of(this).get(ProgressionViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ProgressionViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.progression_fragment, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setViewmodel(mViewModel);
+        View view = binding.getRoot();
+
 
         mViewModel.getCurrentChord1().observe(this, new Observer<String>() {
             @Override
@@ -83,6 +80,7 @@ public class ProgressionFragment extends Fragment {
                 System.out.println(progression.getName());
             }
         });
+
         mAddChordButton = binding.addChord;
         mSubtractChordButton = binding.subtractChord;
         mChord1Button = binding.CH1;
@@ -95,13 +93,6 @@ public class ProgressionFragment extends Fragment {
         // Start with only 4 visible chords
         mChord5Button.setVisibility(View.GONE);
         mChord6Button.setVisibility(View.GONE);
-
-        currentProgression.addChord((new Chord(mChord1Button.getText().toString(), 1)));
-        currentProgression.addChord((new Chord(mChord2Button.getText().toString(), 1)));
-        currentProgression.addChord((new Chord(mChord3Button.getText().toString(), 1)));
-        currentProgression.addChord((new Chord(mChord4Button.getText().toString(), 1)));
-        //System.out.println(mChord4Button.getText().toString());
-        mViewModel.getProgression().setValue(currentProgression);
 
         mAddChordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,9 +131,7 @@ public class ProgressionFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String userInputValue = userInput.getText().toString();
-                        mViewModel.getCurrentChord1().setValue(userInputValue);
-                        currentProgression.addChord((new Chord(userInputValue, 1)));
-                        mViewModel.getProgression().setValue(currentProgression);
+                        mViewModel.changeChord(0, userInputValue);
                     }
                 });
                 inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -155,7 +144,7 @@ public class ProgressionFragment extends Fragment {
                 alertDialog.show();
             }
         });
-
+/*
         mChord2Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -247,7 +236,7 @@ public class ProgressionFragment extends Fragment {
 
             }
         });
-
+*/
         return view;
     }
 
