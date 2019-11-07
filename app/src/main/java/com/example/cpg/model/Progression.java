@@ -25,6 +25,12 @@ public class Progression {
         chords = new ArrayList<>();
     }
 
+    //Replaces the chord at position i with chord of new name
+    public void changeChord(int i, String chordName){
+        Chord oldChord = chords.get(i);
+        Chord newChord = new Chord(chordName, oldChord.getLengthInBars());
+        chords.set(i, newChord);
+    }
 
     public Progression copy(){
         Progression c = new Progression();
