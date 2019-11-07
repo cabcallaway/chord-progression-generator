@@ -43,7 +43,7 @@ public class ProgressionFragment extends Fragment {
         binding.setViewmodel(mViewModel);
         View view = binding.getRoot();
 
-
+/*
         mViewModel.getCurrentChord1().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String chordName) {
@@ -71,7 +71,7 @@ public class ProgressionFragment extends Fragment {
                 mChord4Button.setText(chordName);
             }
         });
-
+*/
         mViewModel.getProgression().observe(this, new Observer<Progression>() {
             @Override
             public void onChanged(@Nullable Progression progression) {
@@ -131,6 +131,7 @@ public class ProgressionFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String userInputValue = userInput.getText().toString();
+                        mChord1Button.setText(userInputValue);
                         mViewModel.changeChord(0, userInputValue);
                     }
                 });
@@ -144,7 +145,6 @@ public class ProgressionFragment extends Fragment {
                 alertDialog.show();
             }
         });
-/*
         mChord2Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,7 +157,8 @@ public class ProgressionFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String userInputValue = userInput.getText().toString();
-                        mViewModel.getCurrentChord2().setValue(userInputValue);
+                        mChord2Button.setText(userInputValue);
+                        mViewModel.changeChord(1, userInputValue);
                     }
                 });
                 inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -183,7 +184,8 @@ public class ProgressionFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String userInputValue = userInput.getText().toString();
-                        mViewModel.getCurrentChord3().setValue(userInputValue);
+                        mChord3Button.setText(userInputValue);
+                        mViewModel.changeChord(2, userInputValue);
                     }
                 });
                 inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -209,7 +211,8 @@ public class ProgressionFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String userInputValue = userInput.getText().toString();
-                        mViewModel.getCurrentChord4().setValue(userInputValue);
+                        mChord4Button.setText(userInputValue);
+                        mViewModel.changeChord(3, userInputValue);
                     }
                 });
                 inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -223,20 +226,6 @@ public class ProgressionFragment extends Fragment {
             }
         });
 
-        mChord5Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        mChord6Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-*/
         return view;
     }
 
