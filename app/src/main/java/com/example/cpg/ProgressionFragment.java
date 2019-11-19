@@ -46,40 +46,12 @@ public class ProgressionFragment extends Fragment {
         binding.setViewmodel(mViewModel);
         View view = binding.getRoot();
 
-        mViewModel.getCurrentChord1().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String chordName) {
-                mChord1Button.setText(chordName);
-            }
-        });
-
-        mViewModel.getCurrentChord2().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String chordName) {
-                mChord2Button.setText(chordName);
-            }
-        });
-
-        mViewModel.getCurrentChord3().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String chordName) {
-                mChord3Button.setText(chordName);
-            }
-        });
-
-        mViewModel.getCurrentChord4().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String chordName) {
-                mChord4Button.setText(chordName);
-            }
-        });
-
         mViewModel.getProgression().observe(this, new Observer<Progression>() {
             @Override
             public void onChanged(@Nullable Progression progression) {
-                progression.setName(mChord1Button.getText().toString() + mChord1Button.getText().toString() + mChord1Button.getText().toString() + mChord1Button.getText().toString());
+                //progression.setName(mChord1Button.getText().toString() + mChord2Button.getText().toString() + mChord3Button.getText().toString() + mChord4Button.getText().toString());
                 //progression.getChords();
-                System.out.println(progression.getName());
+                //System.out.println(progression.getName());
             }
         });
 

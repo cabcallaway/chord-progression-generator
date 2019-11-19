@@ -14,8 +14,6 @@ public class ProgressionViewModel extends ViewModel {
 
     private MutableLiveData<Progression> prog;
     private MutableLiveData<List<Chord>> chords;
-    private MutableLiveData<String> currentChord1, currentChord2, currentChord3, currentChord4;
-
     private MutableLiveData<String> curchord;
 
     public LiveData<String> getCurchord(int i){
@@ -36,34 +34,6 @@ public class ProgressionViewModel extends ViewModel {
         p.changeChord(i, chordName);
         prog.setValue(p);
         chords.setValue(p.getChords());
-    }
-
-    public LiveData<String> getCurrentChord1() {
-        if (currentChord1 == null) {
-            currentChord1 = new MutableLiveData<String>();
-        }
-        return currentChord1;
-    }
-
-    public LiveData<String> getCurrentChord2() {
-        if (currentChord2 == null) {
-            currentChord2 = new MutableLiveData<String>();
-        }
-        return currentChord2;
-    }
-
-    public LiveData<String> getCurrentChord3() {
-        if (currentChord3 == null) {
-            currentChord3 = new MutableLiveData<String>();
-        }
-        return currentChord3;
-    }
-
-    public LiveData<String> getCurrentChord4() {
-        if (currentChord4 == null) {
-            currentChord4 = new MutableLiveData<String>();
-        }
-        return currentChord4;
     }
 
     public LiveData<Progression> getProgression(){
@@ -91,14 +61,4 @@ public class ProgressionViewModel extends ViewModel {
         chords.setValue(p.getChords());
 
     }
-
-    public LiveData<List<Chord>> getChords(){
-        if(chords == null){
-            chords = new MutableLiveData<>();
-            //chords.observe();
-        }
-        return chords;
-    }
-
-
 }
