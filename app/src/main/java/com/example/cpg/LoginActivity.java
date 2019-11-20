@@ -17,6 +17,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.room.Room;
 
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.cpg.helpers.InputValidation;
 
@@ -143,8 +144,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         } else {
-            // Snack Bar to show success message that record is wrong
-            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
+            // Toast to show success message that record is wrong
+            Toast.makeText(getApplicationContext(), "Wrong Email or Password", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -17,6 +17,7 @@ import androidx.room.Room;
 
 import android.os.Handler;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.cpg.helpers.InputValidation;
 import com.example.cpg.model.User;
@@ -155,8 +156,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             // finish();
 
         } else {
-            // Snack Bar to show error message that record already exists
-            Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_email_exists), Snackbar.LENGTH_LONG).show();
+            // Toast to show error message that record already exists
+            Toast.makeText(getApplicationContext(), "Email Already Exists", Toast.LENGTH_LONG).show();
         }
     }
 

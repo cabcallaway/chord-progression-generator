@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
-            android:text="Already a member? Login"
+            android:text="Already have an account? Login"
             android:textSize="16dp" />
     </LinearLayout>
 
