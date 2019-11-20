@@ -6,6 +6,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,26 +20,37 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.cpg.helpers.MIDI.MidiGenerator;
 import com.example.cpg.viewModels.ProgressionViewModel;
 import com.example.cpg.model.Chord;
 import com.example.cpg.databinding.ProgressionFragmentBinding;
 import com.example.cpg.model.Progression;
-import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProgressionFragment extends Fragment {
 
+    public MainActivity mainActivity;
+
     private ProgressionViewModel mViewModel;
+
+    private MidiGenerator midiGenerator;
+    private MediaPlayer player;
 
     private Button mAddChordButton;
     private Button mSubtractChordButton;
     private Button mChord1Button, mChord2Button, mChord3Button, mChord4Button, mChord5Button, mChord6Button;
     private ProgressionFragmentBinding binding;
 
+    private List<String> chordList;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+        mainActivity = (MainActivity) getActivity();
 
         //Set up the PROGRESSION VIEW MODEL
         mViewModel = ViewModelProviders.of(getActivity()).get(ProgressionViewModel.class);
@@ -68,6 +81,8 @@ public class ProgressionFragment extends Fragment {
         mChord5Button.setVisibility(View.GONE);
         mChord6Button.setVisibility(View.GONE);
 
+        chordList = Arrays.asList("A", "Am", "A7", "Am7", "B", "Bm", "B7", "Bm7", "C", "Cm", "C7", "Cm7", "D", "Dm", "D7", "Dm7", "E", "Em", "E7", "Em7", "F", "Fm", "F7", "Fm7", "G", "Gm", "G7", "Gm7");
+
         mAddChordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,110 +108,225 @@ public class ProgressionFragment extends Fragment {
             }
         });
 
-        mChord1Button.setOnClickListener(new View.OnClickListener() {
+
+
+        mChord1Button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                final AlertDialog.Builder inputAlert = new AlertDialog.Builder(getActivity());
-                inputAlert.setTitle("Select Chord:");
-                inputAlert.setMessage("A Am A7 Am7 B Bm B7 Bm7 C Cm C7 Cm7 D Dm D7 Dm7 E Em E7 Em7 F Fm F7 Fm7 G Gm G7 Gm7");
-                final EditText userInput = new EditText(getActivity());
-                inputAlert.setView(userInput);
-                inputAlert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            public boolean onLongClick(View v) {
+                //List of progressions to display to user
+                String[] items = new String[chordList.size()];
+                for (int i = 0; i < chordList.size(); i++) {
+
+                    // Assign each value to String array
+                    items[i] = chordList.get(i);
+
+                }
+
+                //new prompt
+                AlertDialog.Builder loadPrompt = new AlertDialog.Builder(getActivity());
+
+                loadPrompt.setTitle("Please select a Chord: ");
+
+                loadPrompt.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String userInputValue = userInput.getText().toString();
+                        String userInputValue = items[which];
                         mChord1Button.setText(userInputValue);
                         mViewModel.changeChord(0, userInputValue);
                     }
                 });
-                inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+
+                loadPrompt.setCancelable(false).setNegativeButton("CANCEL",new DialogInterface.OnClickListener() {
+                    @Override  public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }
                 });
-                AlertDialog alertDialog = inputAlert.create();
-                alertDialog.show();
+
+                loadPrompt.create().show();
+
+                return true;
             }
         });
-        mChord2Button.setOnClickListener(new View.OnClickListener() {
+
+        mChord1Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder inputAlert = new AlertDialog.Builder(getActivity());
-                inputAlert.setTitle("Select Chord:");
-                inputAlert.setMessage("A Am A7 Am7 B Bm B7 Bm7 C Cm C7 Cm7 D Dm D7 Dm7 E Em E7 Em7 F Fm F7 Fm7 G Gm G7 Gm7");
-                final EditText userInput = new EditText(getActivity());
-                inputAlert.setView(userInput);
-                inputAlert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                String curChord = "";
+                curChord = mViewModel.getCurchord(0).getValue();
+                Progression progression = new Progression();
+                progression.addChord(new Chord(curChord, 1));
+                //Write the midi file
+                File midout = new File(getActivity().getCacheDir() + "/midout.mid");
+                midiGenerator = new MidiGenerator();
+                midiGenerator.writeProgression(getActivity(), progression);
+                //Create the media player
+                player = MediaPlayer.create(getActivity(), Uri.fromFile(midout));
+                player.start();
+            }
+        });
+
+        mChord2Button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //List of progressions to display to user
+                String[] items = new String[chordList.size()];
+                for (int i = 0; i < chordList.size(); i++) {
+
+                    // Assign each value to String array
+                    items[i] = chordList.get(i);
+
+                }
+
+                //new prompt
+                AlertDialog.Builder loadPrompt = new AlertDialog.Builder(getActivity());
+
+                loadPrompt.setTitle("Please select a Chord: ");
+
+                loadPrompt.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String userInputValue = userInput.getText().toString();
+                        String userInputValue = items[which];
                         mChord2Button.setText(userInputValue);
                         mViewModel.changeChord(1, userInputValue);
                     }
                 });
-                inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+
+                loadPrompt.setCancelable(false).setNegativeButton("CANCEL",new DialogInterface.OnClickListener() {
+                    @Override  public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }
                 });
-                AlertDialog alertDialog = inputAlert.create();
-                alertDialog.show();
+
+                loadPrompt.create().show();
+
+                return true;
+            }
+        });
+
+        mChord2Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String curChord = "";
+                curChord = mViewModel.getCurchord(1).getValue();
+                Progression progression = new Progression();
+                progression.addChord(new Chord(curChord, 1));
+                //Write the midi file
+                File midout = new File(getActivity().getCacheDir() + "/midout.mid");
+                midiGenerator = new MidiGenerator();
+                midiGenerator.writeProgression(getActivity(), progression);
+                //Create the media player
+                player = MediaPlayer.create(getActivity(), Uri.fromFile(midout));
+                player.start();
+            }
+        });
+
+        mChord3Button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //List of progressions to display to user
+                String[] items = new String[chordList.size()];
+                for (int i = 0; i < chordList.size(); i++) {
+
+                    // Assign each value to String array
+                    items[i] = chordList.get(i);
+
+                }
+
+                //new prompt
+                AlertDialog.Builder loadPrompt = new AlertDialog.Builder(getActivity());
+
+                loadPrompt.setTitle("Please select a Chord: ");
+
+                loadPrompt.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String userInputValue = items[which];
+                        mChord3Button.setText(userInputValue);
+                        mViewModel.changeChord(2, userInputValue);
+                    }
+                });
+
+                loadPrompt.setCancelable(false).setNegativeButton("CANCEL",new DialogInterface.OnClickListener() {
+                    @Override  public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+                loadPrompt.create().show();
+
+                return true;
             }
         });
 
         mChord3Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder inputAlert = new AlertDialog.Builder(getActivity());
-                inputAlert.setTitle("Select Chord:");
-                inputAlert.setMessage("A Am A7 Am7 B Bm B7 Bm7 C Cm C7 Cm7 D Dm D7 Dm7 E Em E7 Em7 F Fm F7 Fm7 G Gm G7 Gm7");
-                final EditText userInput = new EditText(getActivity());
-                inputAlert.setView(userInput);
-                inputAlert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                String curChord = "";
+                curChord = mViewModel.getCurchord(2).getValue();
+                Progression progression = new Progression();
+                progression.addChord(new Chord(curChord, 1));
+                //Write the midi file
+                File midout = new File(getActivity().getCacheDir() + "/midout.mid");
+                midiGenerator = new MidiGenerator();
+                midiGenerator.writeProgression(getActivity(), progression);
+                //Create the media player
+                player = MediaPlayer.create(getActivity(), Uri.fromFile(midout));
+                player.start();
+            }
+        });
+
+        mChord4Button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //List of progressions to display to user
+                String[] items = new String[chordList.size()];
+                for (int i = 0; i < chordList.size(); i++) {
+
+                    // Assign each value to String array
+                    items[i] = chordList.get(i);
+
+                }
+
+                //new prompt
+                AlertDialog.Builder loadPrompt = new AlertDialog.Builder(getActivity());
+
+                loadPrompt.setTitle("Please select a Chord: ");
+
+                loadPrompt.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String userInputValue = userInput.getText().toString();
-                        mChord3Button.setText(userInputValue);
-                        mViewModel.changeChord(2, userInputValue);
+                        String userInputValue = items[which];
+                        mChord4Button.setText(userInputValue);
+                        mViewModel.changeChord(3, userInputValue);
                     }
                 });
-                inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+
+                loadPrompt.setCancelable(false).setNegativeButton("CANCEL",new DialogInterface.OnClickListener() {
+                    @Override  public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }
                 });
-                AlertDialog alertDialog = inputAlert.create();
-                alertDialog.show();
+
+                loadPrompt.create().show();
+
+                return true;
             }
         });
 
         mChord4Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder inputAlert = new AlertDialog.Builder(getActivity());
-                inputAlert.setTitle("Select Chord:");
-                inputAlert.setMessage("A Am A7 Am7 B Bm B7 Bm7 C Cm C7 Cm7 D Dm D7 Dm7 E Em E7 Em7 F Fm F7 Fm7 G Gm G7 Gm7");
-                final EditText userInput = new EditText(getActivity());
-                inputAlert.setView(userInput);
-                inputAlert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String userInputValue = userInput.getText().toString();
-                        mChord4Button.setText(userInputValue);
-                        mViewModel.changeChord(3, userInputValue);
-                    }
-                });
-                inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog alertDialog = inputAlert.create();
-                alertDialog.show();
+                String curChord = "";
+                curChord = mViewModel.getCurchord(3).getValue();
+                Progression progression = new Progression();
+                progression.addChord(new Chord(curChord, 1));
+                //Write the midi file
+                File midout = new File(getActivity().getCacheDir() + "/midout.mid");
+                midiGenerator = new MidiGenerator();
+                midiGenerator.writeProgression(getActivity(), progression);
+                //Create the media player
+                player = MediaPlayer.create(getActivity(), Uri.fromFile(midout));
+                player.start();
             }
         });
 

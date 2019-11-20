@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mUserListButton;
 
     private MidiGenerator midiGenerator;
-    private MediaPlayer player;
+    public MediaPlayer player;
 
     private ProgressionDao progressionDao;
     private UserDao userDao;
@@ -242,10 +242,8 @@ public class MainActivity extends AppCompatActivity {
 
                 //Get all of their Progressions the user has given their ID
                 List<String> progressionNames = progressionDao.getAllProgNames(user.getId());
-
                 //List of progressions to display to user
                 String[] items = new String[progressionNames.size()];
-
                 for (int i = 0; i < progressionNames.size(); i++) {
 
                     // Assign each value to String array
