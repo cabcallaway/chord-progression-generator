@@ -83,6 +83,20 @@ public class ProgressionFragment extends Fragment {
 
         chordList = Arrays.asList("A", "Am", "A7", "Am7", "B", "Bm", "B7", "Bm7", "C", "Cm", "C7", "Cm7", "D", "Dm", "D7", "Dm7", "E", "Em", "E7", "Em7", "F", "Fm", "F7", "Fm7", "G", "Gm", "G7", "Gm7");
 
+        // If the load button or generate button (or shake to generate) are pressed, then get the new chord values from MainActivity to update their names
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String chord1Text = bundle.getString("chord1Text");
+            String chord2Text = bundle.getString("chord2Text");
+            String chord3Text = bundle.getString("chord3Text");
+            String chord4Text = bundle.getString("chord4Text");
+
+            mChord1Button.setText(chord1Text);
+            mChord2Button.setText(chord2Text);
+            mChord3Button.setText(chord3Text);
+            mChord4Button.setText(chord4Text);
+        }
+
         mAddChordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

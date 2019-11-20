@@ -18,6 +18,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -163,8 +165,31 @@ public class MainActivity extends AppCompatActivity {
                 randomProgression.addChord(new Chord(progressionNames.get(3), 1));
 
                 pViewModel.setProgression(randomProgression);
+
+                // Pass the chord names to ProgressionFragment so the UI will update
+                FragmentManager fm = getSupportFragmentManager();
+                Bundle arguments = new Bundle();
+                arguments.putString("chord1Text", pViewModel.getCurchord(0).getValue());
+                arguments.putString("chord2Text", pViewModel.getCurchord(1).getValue());
+                arguments.putString("chord3Text", pViewModel.getCurchord(2).getValue());
+                arguments.putString("chord4Text", pViewModel.getCurchord(3).getValue());
+
+                ProgressionFragment fragment = new ProgressionFragment();
+                fragment.setArguments(arguments);
+                fm.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+                // Make the Generate button shake
+                mGenerateButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake));
+
+                //Write the midi file
+                File midout = new File(getCacheDir() + "/midout.mid");
+                midiGenerator = new MidiGenerator();
+                midiGenerator.writeProgression(MainActivity.this, randomProgression);
+                //Create the media player
+                player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
+                player.start();
                 // Restart activity after progression is loaded to update chord button UI
-                Restart();
+                //Restart();
             }
         });
 
@@ -273,15 +298,37 @@ public class MainActivity extends AppCompatActivity {
                 loadPrompt.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Progression currentProg = new Progression();
+                        List<Chord> chordList;
                         String progName = items[which];
 
                         pViewModel.setProgression(progressionDao.getProgressionByName(progName, user.getId()));
+
+                        //currentProg = pViewModel.getProgression().getValue();
+                        //chordList = currentProg.getChords();
+
+                        //pViewModel.changeChord(0, chordList.get(0).getChordName());
+                        //pViewModel.changeChord(1, chordList.get(1).getChordName());
+                        //pViewModel.changeChord(2, chordList.get(2).getChordName());
+                        //pViewModel.changeChord(3, chordList.get(3).getChordName());
+
+                        // Pass the chord names to ProgressionFragment so the UI will update
+                        FragmentManager fm = getSupportFragmentManager();
+                        Bundle arguments = new Bundle();
+                        arguments.putString("chord1Text", pViewModel.getCurchord(0).getValue());
+                        arguments.putString("chord2Text", pViewModel.getCurchord(1).getValue());
+                        arguments.putString("chord3Text", pViewModel.getCurchord(2).getValue());
+                        arguments.putString("chord4Text", pViewModel.getCurchord(3).getValue());
+
+                        ProgressionFragment fragment = new ProgressionFragment();
+                        fragment.setArguments(arguments);
+                        fm.beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
                         if (player != null && player.isPlaying()) {
                             player.stop();
                         }
                         // Restart activity after progression is loaded to update chord button UI
-                        Restart();
+                        //Restart();
                     }
                 });
 
@@ -316,8 +363,31 @@ public class MainActivity extends AppCompatActivity {
                 randomProgression.addChord(new Chord(progressionNames.get(3), 1));
 
                 pViewModel.setProgression(randomProgression);
-                // Restart activity after progression is loaded to update chord button UI
-                Restart();
+
+                //pViewModel.changeChord(0, progressionNames.get(0));
+                //pViewModel.changeChord(1, progressionNames.get(1));
+                //pViewModel.changeChord(2, progressionNames.get(2));
+                //pViewModel.changeChord(3, progressionNames.get(3));
+
+                // Pass the chord names to ProgressionFragment so the UI will update
+                FragmentManager fm = getSupportFragmentManager();
+                Bundle arguments = new Bundle();
+                arguments.putString("chord1Text", pViewModel.getCurchord(0).getValue());
+                arguments.putString("chord2Text", pViewModel.getCurchord(1).getValue());
+                arguments.putString("chord3Text", pViewModel.getCurchord(2).getValue());
+                arguments.putString("chord4Text", pViewModel.getCurchord(3).getValue());
+
+                ProgressionFragment fragment = new ProgressionFragment();
+                fragment.setArguments(arguments);
+                fm.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+
+                if (player != null && player.isPlaying()) {
+                    player.pause();
+                }
+                // Play a shake animation for the Generate button
+                mGenerateButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake));
+                //Restart();
             }
         }));
 
