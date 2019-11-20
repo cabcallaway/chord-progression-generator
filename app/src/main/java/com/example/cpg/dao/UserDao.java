@@ -24,6 +24,9 @@ public interface UserDao {
     @Query("SELECT * FROM User WHERE email = :email ")
     public User getUserByEmail(String email);
 
+    @Query("SELECT password FROM User WHERE email = :email")
+    public String getPasswordByEmail(String email);
+
     //implicit conversion from int to boolean (table SHOULD have 0 or 1 users with that email)
     @Query("SELECT COUNT() FROM User WHERE email = :email ")
     public int checkUser(String email);
