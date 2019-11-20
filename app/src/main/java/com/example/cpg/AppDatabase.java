@@ -13,7 +13,7 @@ import com.example.cpg.model.Progression;
 import com.example.cpg.model.User;
 import com.example.cpg.dao.UserDao;
 
-@Database(entities = {User.class, Progression.class}, version = 4)
+@Database(entities = {User.class, Progression.class}, version = 5)
 @TypeConverters({Converters.class})
 
 public abstract class AppDatabase extends RoomDatabase {

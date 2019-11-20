@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.example.cpg.helpers.InputValidation;
 import com.example.cpg.model.User;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final AppCompatActivity activity = RegisterActivity.this;
@@ -145,7 +147,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             //user.setId();
             user.setName(textInputEditTextName.getText().toString().trim());
             user.setEmail(textInputEditTextEmail.getText().toString().trim());
-            user.setPassword(textInputEditTextPassword.getText().toString().trim());
+
+            //Salt the password using BCrypt first
+            String hashedPass = BCrypt.hashpw(textInputEditTextPassword.getText().toString().trim(), BCrypt.gensalt());
+
+            user.setPassword(hashedPass);
 
             //databaseHelper.addUser(user);
             userDao.insert(user);
