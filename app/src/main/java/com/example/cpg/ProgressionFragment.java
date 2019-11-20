@@ -333,6 +333,22 @@ public class ProgressionFragment extends Fragment {
         return view;
     }
 
+    public void setTextChord1(String text) {
+        mChord1Button.setText(text);
+    }
+
+    public void setTextChord2(String text) {
+        mChord2Button.setText(text);
+    }
+
+    public void setTextChord3(String text) {
+        mChord3Button.setText(text);
+    }
+
+    public void setTextChord4(String text) {
+        mChord4Button.setText(text);
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

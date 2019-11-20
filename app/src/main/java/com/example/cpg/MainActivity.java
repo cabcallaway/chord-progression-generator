@@ -2,6 +2,7 @@ package com.example.cpg;
 
 import android.content.Context;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -13,11 +14,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.cpg.dao.ProgressionDao;
 import com.example.cpg.dao.UserDao;
@@ -37,6 +40,8 @@ import com.example.cpg.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import safety.com.br.android_shake_detector.core.ShakeCallback;
@@ -62,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mUpdateAccountButton;
     private Button mDeleteAccountButton;
-    private Button mUserListButton;
+    private Button mGenerateButton;
+    private Button mLogoutButton;
 
     private MidiGenerator midiGenerator;
     public MediaPlayer player;
@@ -114,8 +120,11 @@ public class MainActivity extends AppCompatActivity {
         mPauseButton = findViewById(R.id.pause_button);
         mSaveButton = findViewById(R.id.save_button);
         mLoadButton = findViewById(R.id.load_button);
+        mGenerateButton = findViewById(R.id.generate_button);
         mUpdateAccountButton = findViewById(R.id.update_account_button);
         mDeleteAccountButton = findViewById(R.id.delete_account_button);
+        mLogoutButton = findViewById(R.id.logout_button);
+
 
         //Setup Options for Shake Detector (external library)
         ShakeOptions options = new ShakeOptions()
@@ -128,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Same Logic as Play Button Listener
             //TODO: Clean up, maybe move into separate function
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onShake() {
 
@@ -135,20 +145,26 @@ public class MainActivity extends AppCompatActivity {
 
                 //If user hits play while already playing an progression, restart if same progression, or rebuild midi if different
                 if(player != null && player.isPlaying()){
-
                     player.stop();
-
                 }
 
-                //Write the midi file
-                File midout = new File(getCacheDir() + "/midout.mid");
-                midiGenerator = new MidiGenerator();
-                midiGenerator.writeProgression(MainActivity.this, progression);
-                //Create the media player
-                player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
-                player.setLooping(true);
-                player.start();
+                Progression randomProgression = new Progression();
 
+                List<String> progressionNames = Arrays.asList("A", "Am", "A7", "Am7", "B", "Bm", "B7", "Bm7", "C", "Cm", "C7", "Cm7", "D", "Dm", "D7", "Dm7", "E", "Em", "E7", "Em7", "F", "Fm", "F7", "Fm7", "G", "Gm", "G7", "Gm7");
+                Collections.shuffle(progressionNames);
+
+                String progRandomName = "";
+                progRandomName = String.join("", progressionNames.get(0), progressionNames.get(1), progressionNames.get(2), progressionNames.get(3));
+
+                randomProgression.setName(progRandomName);
+                randomProgression.addChord(new Chord(progressionNames.get(0), 1));
+                randomProgression.addChord(new Chord(progressionNames.get(1), 1));
+                randomProgression.addChord(new Chord(progressionNames.get(2), 1));
+                randomProgression.addChord(new Chord(progressionNames.get(3), 1));
+
+                pViewModel.setProgression(randomProgression);
+                // Restart activity after progression is loaded to update chord button UI
+                Restart();
             }
         });
 
@@ -236,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
         mLoadButton.setOnClickListener((new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
                 //Find the User
                 user = userDao.getUserByEmail(emailFromIntent);
 
@@ -248,27 +263,25 @@ public class MainActivity extends AppCompatActivity {
 
                     // Assign each value to String array
                     items[i] = progressionNames.get(i);
-
                 }
 
                 //new prompt
                 AlertDialog.Builder loadPrompt = new AlertDialog.Builder(context);
 
-                loadPrompt.setTitle("Please select a Progression: ");
+                loadPrompt.setTitle("Please Select a Progression: ");
 
                 loadPrompt.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         String progName = items[which];
 
                         pViewModel.setProgression(progressionDao.getProgressionByName(progName, user.getId()));
-                        // Restart activity after progression is loaded to update chord button UI
+
                         if (player != null && player.isPlaying()) {
                             player.stop();
                         }
-                        // Restart activity to correctly update names of chords in the UI
-                        Restart(progName);
+                        // Restart activity after progression is loaded to update chord button UI
+                        Restart();
                     }
                 });
 
@@ -284,6 +297,30 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
+        mGenerateButton.setOnClickListener((new View.OnClickListener(){
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+                Progression randomProgression = new Progression();
+
+                List<String> progressionNames = Arrays.asList("A", "Am", "A7", "Am7", "B", "Bm", "B7", "Bm7", "C", "Cm", "C7", "Cm7", "D", "Dm", "D7", "Dm7", "E", "Em", "E7", "Em7", "F", "Fm", "F7", "Fm7", "G", "Gm", "G7", "Gm7");
+                Collections.shuffle(progressionNames);
+
+                String progRandomName = "";
+                progRandomName = String.join("", progressionNames.get(0), progressionNames.get(1), progressionNames.get(2), progressionNames.get(3));
+
+                randomProgression.setName(progRandomName);
+                randomProgression.addChord(new Chord(progressionNames.get(0), 1));
+                randomProgression.addChord(new Chord(progressionNames.get(1), 1));
+                randomProgression.addChord(new Chord(progressionNames.get(2), 1));
+                randomProgression.addChord(new Chord(progressionNames.get(3), 1));
+
+                pViewModel.setProgression(randomProgression);
+                // Restart activity after progression is loaded to update chord button UI
+                Restart();
+            }
+        }));
+
 
         //Update Account Details listeners
         mUpdateAccountButton.setOnClickListener(new View.OnClickListener() {
@@ -295,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
                 final AlertDialog.Builder inputAlert = new AlertDialog.Builder(context);
                 inputAlert.setTitle("Update your account information");
-                inputAlert.setMessage("Please enter a new email address");
+                inputAlert.setMessage("Please enter a new email address:");
                 final EditText userInput = new EditText(context);
                 inputAlert.setView(userInput);
                 inputAlert.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
@@ -318,13 +355,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mLogoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         mDeleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 user.setEmail(emailFromIntent);
                 user = userDao.getUserByEmail(emailFromIntent);
-                userDao.delete(user);
-                finish();
+
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle("Delete Account");
+                alertDialog.setMessage("Are You Sure?");
+
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                userDao.delete(user);
+                                finish();
+                                dialog.dismiss();
+                            }
+                        });
+
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+                Button btnPositive = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button btnNegative = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) btnPositive.getLayoutParams();
+                layoutParams.weight = 10;
+                btnPositive.setLayoutParams(layoutParams);
+                btnNegative.setLayoutParams(layoutParams);
+
+
             }
         });
 
@@ -384,10 +457,10 @@ public class MainActivity extends AppCompatActivity {
         SpotifyAppRemote.disconnect(mSpotifyAppRemote);
     }
 
-    public void Restart(String progName)
+    public void Restart()
     {
         this.recreate();
         // Display message stating which progression was loaded
-        Snackbar.make(findViewById(android.R.id.content), "Loaded progression " + progName, Snackbar.LENGTH_LONG).show();
+        //Snackbar.make(findViewById(android.R.id.content), "Loaded progression " + progName, Snackbar.LENGTH_LONG).show();
     }
 }
