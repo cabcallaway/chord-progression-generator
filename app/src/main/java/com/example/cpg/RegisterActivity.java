@@ -156,8 +156,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             //databaseHelper.addUser(user);
             userDao.insert(user);
 
-            // Snack Bar to show success message that record saved successfully
-            Snackbar.make(findViewById(android.R.id.content), getString(R.string.success_message), Snackbar.LENGTH_LONG).show();
+            // Toast to show success message that record saved successfully
+            Toast.makeText(getApplicationContext(), "Registration Successful", Toast.LENGTH_LONG).show();
             emptyInputEditText();
             // finish();
 

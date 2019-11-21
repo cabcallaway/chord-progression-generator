@@ -12,15 +12,19 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.cpg.dao.ProgressionDao;
 import com.example.cpg.dao.UserDao;
@@ -163,8 +167,31 @@ public class MainActivity extends AppCompatActivity {
                 randomProgression.addChord(new Chord(progressionNames.get(3), 1));
 
                 pViewModel.setProgression(randomProgression);
-                // Restart activity after progression is loaded to update chord button UI
-                Restart();
+
+                // Pass the chord names to ProgressionFragment so the UI will update
+                FragmentManager fm = getSupportFragmentManager();
+                Bundle arguments = new Bundle();
+                arguments.putString("chord1Text", pViewModel.getCurchord(0).getValue());
+                arguments.putString("chord2Text", pViewModel.getCurchord(1).getValue());
+                arguments.putString("chord3Text", pViewModel.getCurchord(2).getValue());
+                arguments.putString("chord4Text", pViewModel.getCurchord(3).getValue());
+
+                ProgressionFragment fragment = new ProgressionFragment();
+                fragment.setArguments(arguments);
+                fm.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+                // Make the Generate button shake
+                mGenerateButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake));
+
+                //Write the midi file
+                File midout = new File(getCacheDir() + "/midout.mid");
+                midiGenerator = new MidiGenerator();
+                midiGenerator.writeProgression(MainActivity.this, randomProgression);
+                //Create the media player
+                player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
+                player.start();
+
+                Snackbar.make(findViewById(android.R.id.content), "Progression " + randomProgression.getName() + " Generated!", Snackbar.LENGTH_LONG).show();
             }
         });
 
@@ -237,11 +264,11 @@ public class MainActivity extends AppCompatActivity {
                 if (progressionDao.checkProgression(progression.getName(), progression.getUserId()) == 0) {
 
                     progressionDao.insert(progression);
-                    Snackbar.make(findViewById(android.R.id.content), "Progression " + progression.getName() + " saved", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Progression " + progression.getName() + " Saved", Snackbar.LENGTH_LONG).show();
 
                 } else {
                     // Snack Bar to show error message that record already exists
-                    Snackbar.make(findViewById(android.R.id.content), "Progression " + progression.getName() + " already exists", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Progression " + progression.getName() + " Already Exists", Snackbar.LENGTH_LONG).show();
                 }
 
 
@@ -273,15 +300,37 @@ public class MainActivity extends AppCompatActivity {
                 loadPrompt.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Progression currentProg = new Progression();
+                        List<Chord> chordList;
                         String progName = items[which];
 
                         pViewModel.setProgression(progressionDao.getProgressionByName(progName, user.getId()));
 
+                        //currentProg = pViewModel.getProgression().getValue();
+                        //chordList = currentProg.getChords();
+
+                        //pViewModel.changeChord(0, chordList.get(0).getChordName());
+                        //pViewModel.changeChord(1, chordList.get(1).getChordName());
+                        //pViewModel.changeChord(2, chordList.get(2).getChordName());
+                        //pViewModel.changeChord(3, chordList.get(3).getChordName());
+
+                        // Pass the chord names to ProgressionFragment so the UI will update
+                        FragmentManager fm = getSupportFragmentManager();
+                        Bundle arguments = new Bundle();
+                        arguments.putString("chord1Text", pViewModel.getCurchord(0).getValue());
+                        arguments.putString("chord2Text", pViewModel.getCurchord(1).getValue());
+                        arguments.putString("chord3Text", pViewModel.getCurchord(2).getValue());
+                        arguments.putString("chord4Text", pViewModel.getCurchord(3).getValue());
+
+                        ProgressionFragment fragment = new ProgressionFragment();
+                        fragment.setArguments(arguments);
+                        fm.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
                         if (player != null && player.isPlaying()) {
                             player.stop();
                         }
-                        // Restart activity after progression is loaded to update chord button UI
-                        Restart();
+
+                        Snackbar.make(findViewById(android.R.id.content), "Progression " + progName + " Loaded", Snackbar.LENGTH_LONG).show();
                     }
                 });
 
@@ -316,8 +365,32 @@ public class MainActivity extends AppCompatActivity {
                 randomProgression.addChord(new Chord(progressionNames.get(3), 1));
 
                 pViewModel.setProgression(randomProgression);
-                // Restart activity after progression is loaded to update chord button UI
-                Restart();
+
+                //pViewModel.changeChord(0, progressionNames.get(0));
+                //pViewModel.changeChord(1, progressionNames.get(1));
+                //pViewModel.changeChord(2, progressionNames.get(2));
+                //pViewModel.changeChord(3, progressionNames.get(3));
+
+                // Pass the chord names to ProgressionFragment so the UI will update
+                FragmentManager fm = getSupportFragmentManager();
+                Bundle arguments = new Bundle();
+                arguments.putString("chord1Text", pViewModel.getCurchord(0).getValue());
+                arguments.putString("chord2Text", pViewModel.getCurchord(1).getValue());
+                arguments.putString("chord3Text", pViewModel.getCurchord(2).getValue());
+                arguments.putString("chord4Text", pViewModel.getCurchord(3).getValue());
+
+                ProgressionFragment fragment = new ProgressionFragment();
+                fragment.setArguments(arguments);
+                fm.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+
+                if (player != null && player.isPlaying()) {
+                    player.pause();
+                }
+                // Play a shake animation for the Generate button
+                mGenerateButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake));
+
+                Snackbar.make(findViewById(android.R.id.content), "Progression " + randomProgression.getName() + " Generated!", Snackbar.LENGTH_LONG).show();
             }
         }));
 
@@ -342,6 +415,7 @@ public class MainActivity extends AppCompatActivity {
                         user.setEmail(userInputValue);
                         userDao.update(user);
                         finish();
+                        Toast.makeText(getApplicationContext(), "Email Updated Successfully", Toast.LENGTH_LONG).show();
                     }
                 });
                 inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -359,6 +433,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                Toast.makeText(getApplicationContext(), "Logged Out Successfully", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -378,6 +453,7 @@ public class MainActivity extends AppCompatActivity {
                                 userDao.delete(user);
                                 finish();
                                 dialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Account Deleted Successfully", Toast.LENGTH_LONG).show();
                             }
                         });
 
@@ -396,8 +472,6 @@ public class MainActivity extends AppCompatActivity {
                 layoutParams.weight = 10;
                 btnPositive.setLayoutParams(layoutParams);
                 btnNegative.setLayoutParams(layoutParams);
-
-
             }
         });
 
@@ -433,8 +507,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("MainActivity", "FAILED");
                     }
                 });
-
-
     }
 
     private void connected() {
@@ -455,12 +527,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "ONSTOP TRIGGERED");
         super.onStop();
         SpotifyAppRemote.disconnect(mSpotifyAppRemote);
-    }
 
-    public void Restart()
-    {
-        this.recreate();
-        // Display message stating which progression was loaded
-        //Snackbar.make(findViewById(android.R.id.content), "Loaded progression " + progName, Snackbar.LENGTH_LONG).show();
+        if (player != null && player.isPlaying()) {
+            player.pause();
+        }
     }
 }

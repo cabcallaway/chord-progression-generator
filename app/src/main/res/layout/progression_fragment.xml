@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
@@ -9,7 +10,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".ProgressionFragment">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top"
@@ -17,10 +17,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="146dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
@@ -30,32 +30,9 @@
                 android:text="@string/welcome"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />-->
 
-            <Button
-                android:id="@+id/add_chord"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="96dp"
-                android:layout_marginLeft="96dp"
-                android:text="@string/add_chord"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/subtract_chord"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:text="@string/subtract_chord"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/add_chord"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,50 +44,16 @@
                 android:id="@+id/chords"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="76dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <Button
-                    android:id="@+id/CH1"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginLeft="24dp"
-                    android:text="@{viewmodel.getCurchord(0)}"
-                    android:textAllCaps="false"
-                    app:layout_constraintEnd_toStartOf="@+id/CH2"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/CH2"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:text="@{viewmodel.getCurchord(1)}"
-                    android:textAllCaps="false"
-                    app:layout_constraintEnd_toStartOf="@+id/CH3"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/CH1"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/CH3"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:text="@{viewmodel.getCurchord(2)}"
-                    app:layout_constraintEnd_toStartOf="@+id/CH4"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/CH2"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
                     android:id="@+id/CH4"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginEnd="24dp"
                     android:layout_marginRight="24dp"
                     android:text="@{viewmodel.getCurchord(3)}"
@@ -120,27 +63,42 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/CH5"
+                    android:id="@+id/CH3"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="28dp"
+                    android:text="@{viewmodel.getCurchord(2)}"
+                    app:layout_constraintEnd_toStartOf="@+id/CH4"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/CH2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/CH2"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="28dp"
+                    android:text="@{viewmodel.getCurchord(1)}"
+                    android:textAllCaps="false"
+                    app:layout_constraintEnd_toStartOf="@+id/CH3"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/CH1"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/CH1"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginLeft="24dp"
-                    android:text=""
+                    android:layout_marginTop="28dp"
+                    android:text="@{viewmodel.getCurchord(0)}"
                     android:textAllCaps="false"
-                    app:layout_constraintTop_toBottomOf="@id/CH4"
+                    app:layout_constraintEnd_toStartOf="@+id/CH2"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
-                    android:id="@+id/CH6"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:text="B"
-                    android:textAllCaps="false"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/CH5"
-                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
