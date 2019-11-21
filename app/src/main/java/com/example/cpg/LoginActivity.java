@@ -3,9 +3,13 @@ package com.example.cpg;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 //import com.example.cpg.sql.DatabaseHelper;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.example.cpg.Connectors.UserService;
 import com.example.cpg.dao.UserDao;
 import com.example.cpg.model.User;
 import com.google.android.material.snackbar.Snackbar;
@@ -19,6 +23,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.room.Room;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.cpg.helpers.InputValidation;
@@ -27,7 +32,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = LoginActivity.this;
-
+    private static final String SCOPES = "user-read-recently-played,user-library-modify,user-read-email,user-read-private";
     private AppDatabase database;
 
     private NestedScrollView nestedScrollView;
@@ -44,6 +49,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private InputValidation inputValidation;
     //private DatabaseHelper databaseHelper;
+
+    Bundle extras = new Bundle();
 
     private UserDao userDao;
 
@@ -63,6 +70,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initViews();
         initListeners();
         initObjects();
+        msharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+        queue = Volley.newRequestQueue(this);
     }
 
     /**
@@ -99,7 +108,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         database = AppDatabase.getInstance(getApplicationContext());
         userDao = database.getUserDao();
         inputValidation = new InputValidation(activity);
-
     }
 
     /**
@@ -118,6 +126,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent intentRegister = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intentRegister);
                 break;
+            case R.id.spotifybutton:
+                AuthenticationRequest.Builder builder =
+                        new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
+                builder.setScopes(new String[]{SCOPES});
+                AuthenticationRequest request = builder.build();
+
+                AuthenticationClient.openLoginActivity(LoginActivity.this, REQUEST_CODE, request);
         }
     }
 
@@ -143,10 +158,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //Compare to the given password provided by the user.
             if (BCrypt.checkpw(textInputEditTextPassword.getText().toString().trim(), hashedPass)) {
                 Intent accountsIntent = new Intent(getApplicationContext(), MainActivity.class);
-                accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
+                extras.putString("email", textInputEditTextEmail.getText().toString().trim());
+                accountsIntent.putExtras(extras);
                 emptyInputEditText();
                 startActivity(accountsIntent);
-
 
             } else {
                 // Toast to show wrong password
@@ -154,10 +169,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
         } else {
-
             // Toast to show incorrect email
             Toast.makeText(getApplicationContext(), "No user is registered with that email.", Toast.LENGTH_LONG).show();
-
         }
     }
 

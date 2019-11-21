@@ -8,7 +8,7 @@ public class User {
     private String name;
     private String email;
     private String password;
-    //something for storing spotify credentials?
+    private String spotifyId;
 
     public int getId() {
 
@@ -56,6 +56,14 @@ public class User {
 
         this.password = password;
 
+    }
+
+    public String getSpotifyId(){
+        return spotifyId;
+    }
+
+    public void setSpotifyId(String spotifyId){
+        this.spotifyId = spotifyId;
     }
 
 }

@@ -111,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
         database = AppDatabase.getInstance(getApplicationContext());
 
         //Get currently logged in user
-        String emailFromIntent = getIntent().getStringExtra("EMAIL");
+        String emailFromIntent = getIntent().getExtras().getString("email");
+
         //userInfo = new DatabaseHelper(activity);
         userDao = database.getUserDao();
         user = new User();

@@ -31,6 +31,9 @@ public interface UserDao {
     @Query("SELECT COUNT() FROM User WHERE email = :email ")
     public int checkUser(String email);
 
+    @Query("SELECT COUNT() FROM User WHERE spotifyId = :spotifyId")
+    public int checkUserSpotify(String spotifyId);
+
     @Query("SELECT COUNT() FROM User WHERE email = :email AND password = :password ")
     public int checkUser(String email, String password);
 
