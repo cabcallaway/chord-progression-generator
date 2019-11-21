@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
         mDeleteAccountButton = findViewById(R.id.delete_account_button);
         mLogoutButton = findViewById(R.id.logout_button);
 
-
         //Setup Options for Shake Detector (external library)
         ShakeOptions options = new ShakeOptions()
                 .background(false)
@@ -184,12 +183,12 @@ public class MainActivity extends AppCompatActivity {
                 mGenerateButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake));
 
                 //Write the midi file
-                File midout = new File(getCacheDir() + "/midout.mid");
-                midiGenerator = new MidiGenerator();
-                midiGenerator.writeProgression(MainActivity.this, randomProgression);
+                //File midout = new File(getCacheDir() + "/midout.mid");
+                //midiGenerator = new MidiGenerator();
+                //midiGenerator.writeProgression(MainActivity.this, randomProgression);
                 //Create the media player
-                player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
-                player.start();
+                //player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
+                //player.start();
 
                 Snackbar.make(findViewById(android.R.id.content), "Progression " + randomProgression.getName() + " Generated!", Snackbar.LENGTH_LONG).show();
             }
@@ -305,8 +304,6 @@ public class MainActivity extends AppCompatActivity {
                 loadPrompt.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Progression currentProg = new Progression();
-                        List<Chord> chordList;
                         String progName = items[which];
 
                         pViewModel.setProgression(progressionDao.getProgressionByName(progName, user.getId()));
