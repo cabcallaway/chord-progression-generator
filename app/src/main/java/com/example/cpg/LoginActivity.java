@@ -130,29 +130,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        //if (userDao.checkUser(textInputEditTextEmail.getText().toString().trim()
-                //, textInputEditTextPassword.getText().toString().trim())) {
-        //if (userDao.checkUser(textInputEditTextEmail.getText().toString().trim()
-                //, textInputEditTextPassword.getText().toString().trim()) == 1) {
+        if (userDao.checkUser(textInputEditTextEmail.getText().toString().trim()) == 1) {
 
-        //Get the hashed password stored in the database
-        String hashedPass = userDao.getPasswordByEmail(textInputEditTextEmail.getText().toString().trim());
+            //Get the hashed password stored in the database
+            String hashedPass = userDao.getPasswordByEmail(textInputEditTextEmail.getText().toString().trim());
 
-        //Compare to the given password provided by the user.
-        if (BCrypt.checkpw( textInputEditTextPassword.getText().toString().trim(), hashedPass)) {
-            //Intent accountsIntent = new Intent(activity, UsersListActivity.class);
-            //accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
-            //emptyInputEditText();
-            //startActivity(accountsIntent);
-            Intent accountsIntent = new Intent(getApplicationContext(), MainActivity.class);
-            accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
-            emptyInputEditText();
-            startActivity(accountsIntent);
+            //Compare to the given password provided by the user.
+            if (BCrypt.checkpw(textInputEditTextPassword.getText().toString().trim(), hashedPass)) {
+                Intent accountsIntent = new Intent(getApplicationContext(), MainActivity.class);
+                accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
+                emptyInputEditText();
+                startActivity(accountsIntent);
 
+
+            } else {
+                // Toast to show wrong password
+                Toast.makeText(getApplicationContext(), "Incorrect Password", Toast.LENGTH_LONG).show();
+            }
 
         } else {
-            // Toast to show success message that record is wrong
-            Toast.makeText(getApplicationContext(), "Wrong Email or Password", Toast.LENGTH_LONG).show();
+
+            // Toast to show incorrect email
+            Toast.makeText(getApplicationContext(), "No user is registered with that email.", Toast.LENGTH_LONG).show();
+
         }
     }
 
