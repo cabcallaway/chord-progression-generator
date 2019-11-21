@@ -11,6 +11,8 @@ import com.example.cpg.model.User;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -51,6 +53,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //TODO: DELETE AFTER DEBUGGING
         //Intent main = new Intent(getApplicationContext(), MainActivity.class);
         //startActivity(main);
+
+        // Set the app's color theme to night mode
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         setContentView(R.layout.activity_login);
         //getSupportActionBar().hide();

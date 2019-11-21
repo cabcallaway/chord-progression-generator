@@ -415,6 +415,7 @@ public class MainActivity extends AppCompatActivity {
                         user.setEmail(userInputValue);
                         userDao.update(user);
                         finish();
+                        Toast.makeText(getApplicationContext(), "Email Updated Successfully", Toast.LENGTH_LONG).show();
                     }
                 });
                 inputAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -452,6 +453,7 @@ public class MainActivity extends AppCompatActivity {
                                 userDao.delete(user);
                                 finish();
                                 dialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Account Deleted Successfully", Toast.LENGTH_LONG).show();
                             }
                         });
 
@@ -470,8 +472,6 @@ public class MainActivity extends AppCompatActivity {
                 layoutParams.weight = 10;
                 btnPositive.setLayoutParams(layoutParams);
                 btnNegative.setLayoutParams(layoutParams);
-
-
             }
         });
 
