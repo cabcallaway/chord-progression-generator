@@ -240,9 +240,14 @@ public class MainActivity extends AppCompatActivity {
 
         mSaveButton.setOnClickListener((new View.OnClickListener() {
 
-            //TODO: Get the progression (from Intent?), update database
             @Override
             public void onClick(View v) {
+
+                if (player != null && player.isPlaying()) {
+
+                    player.pause();
+
+                }
 
                 Progression progression = pViewModel.getProgression().getValue();
 
