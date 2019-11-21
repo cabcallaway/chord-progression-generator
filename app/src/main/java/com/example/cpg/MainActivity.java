@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.cpg.dao.ProgressionDao;
 import com.example.cpg.dao.UserDao;
@@ -188,8 +190,8 @@ public class MainActivity extends AppCompatActivity {
                 //Create the media player
                 player = MediaPlayer.create(getApplicationContext(), Uri.fromFile(midout));
                 player.start();
-                // Restart activity after progression is loaded to update chord button UI
-                //Restart();
+
+                Snackbar.make(findViewById(android.R.id.content), "Progression " + randomProgression.getName() + " Generated!", Snackbar.LENGTH_LONG).show();
             }
         });
 
@@ -262,11 +264,11 @@ public class MainActivity extends AppCompatActivity {
                 if (progressionDao.checkProgression(progression.getName(), progression.getUserId()) == 0) {
 
                     progressionDao.insert(progression);
-                    Snackbar.make(findViewById(android.R.id.content), "Progression " + progression.getName() + " saved", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Progression " + progression.getName() + " Saved", Snackbar.LENGTH_LONG).show();
 
                 } else {
                     // Snack Bar to show error message that record already exists
-                    Snackbar.make(findViewById(android.R.id.content), "Progression " + progression.getName() + " already exists", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(android.R.id.content), "Progression " + progression.getName() + " Already Exists", Snackbar.LENGTH_LONG).show();
                 }
 
 
@@ -327,8 +329,8 @@ public class MainActivity extends AppCompatActivity {
                         if (player != null && player.isPlaying()) {
                             player.stop();
                         }
-                        // Restart activity after progression is loaded to update chord button UI
-                        //Restart();
+
+                        Snackbar.make(findViewById(android.R.id.content), "Progression " + progName + " Loaded", Snackbar.LENGTH_LONG).show();
                     }
                 });
 
@@ -387,7 +389,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 // Play a shake animation for the Generate button
                 mGenerateButton.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake));
-                //Restart();
+
+                Snackbar.make(findViewById(android.R.id.content), "Progression " + randomProgression.getName() + " Generated!", Snackbar.LENGTH_LONG).show();
             }
         }));
 
@@ -429,6 +432,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                Toast.makeText(getApplicationContext(), "Logged Out Successfully", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -503,8 +507,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("MainActivity", "FAILED");
                     }
                 });
-
-
     }
 
     private void connected() {
@@ -525,12 +527,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "ONSTOP TRIGGERED");
         super.onStop();
         SpotifyAppRemote.disconnect(mSpotifyAppRemote);
-    }
 
-    public void Restart()
-    {
-        this.recreate();
-        // Display message stating which progression was loaded
-        //Snackbar.make(findViewById(android.R.id.content), "Loaded progression " + progName, Snackbar.LENGTH_LONG).show();
+        if (player != null && player.isPlaying()) {
+            player.pause();
+        }
     }
 }

@@ -39,9 +39,7 @@ public class ProgressionFragment extends Fragment {
     private MidiGenerator midiGenerator;
     private MediaPlayer player;
 
-    private Button mAddChordButton;
-    private Button mSubtractChordButton;
-    private Button mChord1Button, mChord2Button, mChord3Button, mChord4Button, mChord5Button, mChord6Button;
+    private Button mChord1Button, mChord2Button, mChord3Button, mChord4Button;
     private ProgressionFragmentBinding binding;
 
     private List<String> chordList;
@@ -68,18 +66,10 @@ public class ProgressionFragment extends Fragment {
             }
         });
 
-        mAddChordButton = binding.addChord;
-        mSubtractChordButton = binding.subtractChord;
         mChord1Button = binding.CH1;
         mChord2Button = binding.CH2;
         mChord3Button = binding.CH3;
         mChord4Button = binding.CH4;
-        mChord5Button = binding.CH5;
-        mChord6Button = binding.CH6;
-
-        // Start with only 4 visible chords
-        mChord5Button.setVisibility(View.GONE);
-        mChord6Button.setVisibility(View.GONE);
 
         chordList = Arrays.asList("A", "Am", "A7", "Am7", "B", "Bm", "B7", "Bm7", "C", "Cm", "C7", "Cm7", "D", "Dm", "D7", "Dm7", "E", "Em", "E7", "Em7", "F", "Fm", "F7", "Fm7", "G", "Gm", "G7", "Gm7");
 
@@ -96,33 +86,6 @@ public class ProgressionFragment extends Fragment {
             mChord3Button.setText(chord3Text);
             mChord4Button.setText(chord4Text);
         }
-
-        mAddChordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*if (mChord5Button.getVisibility() == View.GONE) {
-                    mChord5Button.setVisibility(View.VISIBLE);
-                }
-                else if (mChord5Button.getVisibility() == View.VISIBLE && mChord6Button.getVisibility() == View.GONE) {
-                    mChord6Button.setVisibility(View.VISIBLE);
-                }*/
-
-            }
-        });
-
-        mSubtractChordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*if (mChord6Button.getVisibility() == View.VISIBLE) {
-                    mChord6Button.setVisibility(View.GONE);
-                }
-                else if (mChord6Button.getVisibility() == View.GONE && mChord5Button.getVisibility() == View.VISIBLE) {
-                    mChord5Button.setVisibility(View.GONE);
-                }*/
-            }
-        });
-
-
 
         mChord1Button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
